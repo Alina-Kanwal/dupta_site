@@ -246,6 +246,15 @@
     background: linear-gradient(180deg, #FAF6F1 0%, #F5E6E6 100%);
   }
 
+  /* Scrollbar hiding utilities */
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+
   /* Spacious section padding */
   .section-padding {
     padding-top: 5rem;

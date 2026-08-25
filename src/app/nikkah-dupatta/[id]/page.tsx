@@ -12,8 +12,8 @@ import { ShoppingBag } from "lucide-react";
 const COLOR_OPTIONS = [...new Set(products.map((p) => p.color))];
 
 const NAME_OPTIONS = [
-  { id: "embroidery", label: "Embroidery Name", charge: 500 },
-  { id: "luxury",    label: "Luxury Name",     charge: 1200 },
+  { id: "embroidery", label: "Embroidery Name", charge: 1000 },
+  { id: "luxury",    label: "Luxury Name",     charge: 3000 },
 ] as const;
 
 type NameOptionId = typeof NAME_OPTIONS[number]["id"] | null;
@@ -85,12 +85,20 @@ export default function ProductDetailPage() {
                       onClick={() => setActiveImageIndex(index)}
                       aria-label={`View image ${index + 1}`}
                       aria-pressed={isActive}
-                      className={`w-16 sm:w-20 aspect-[4/5] flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-[#E8C4C4]/20 ${
+                      className={`relative w-16 sm:w-20 aspect-[4/5] flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-[#E8C4C4]/20 ${
                         isActive
                           ? "border-[#7A1F2B] shadow-[0_0_0_2px_rgba(122,31,43,0.2)]"
                           : "border-[#E8D9D3] hover:border-[#C9A66B]"
                       }`}
-                    />
+                    >
+                      <Image
+                        src={_}
+                        alt={`${product.name} thumbnail ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </button>
                   );
                 })}
               </div>
@@ -122,7 +130,7 @@ export default function ProductDetailPage() {
               <DetailRow label="Total Fabric"  value={product.totalFabric} />
               <DetailRow label="Fabric Type"   value={product.fabricType} />
               <DetailRow label="Design of Lace" value={product.laceDesign} />
-              <DetailRow label="Sitara Work"   value={product.sitaraWork} />
+              <DetailRow label="Sitara Work"   value={product.id <= 3 ? "Including" : product.sitaraWork} />
 
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-2">
                 <span className="font-body text-sm font-medium text-[#2B2320]/70">Color</span>

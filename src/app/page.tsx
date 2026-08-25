@@ -68,37 +68,204 @@ export default function Home() {
             <div className="h-px w-24 bg-[#C9A66B]" />
           </div>
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
-            {products.map(product => {
-              if (!product.name || !product.images || product.images.length === 0) {
-                return null;
-              }
-              return (
-                <Link key={product.id} href={`/nikkah-dupatta/${product.id}`} className="group block">
-                  <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300">
-                    {(product.id === 1 || product.id === 2) && product.images[0] && (
-                      <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
-                        <Image
-                          src={product.images[0]}
-                          alt={product.name}
-                          fill
-                          className="object-cover"
-                        />
+          <div className="relative group/arrows">
+            <button
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full p-2 shadow-md opacity-100 group-hover/arrows:opacity-100 transition-opacity duration-300 hover:bg-white"
+              onClick={() => {
+                const container = document.querySelector('.products-row');
+                if (container) container.scrollTo({ left: container.scrollLeft - container.clientWidth / 1.5, behavior: 'smooth' });
+              }}
+              aria-label="Scroll left"
+            >
+              <svg className="w-5 h-5 text-[#7A1F2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <div className="products-row flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto hide-scrollbar">
+              {/* Card 1: product id 1 */}
+              {(() => {
+                const product = products.find((p) => p.id === 1);
+                if (!product) return null;
+                return (
+                  <div key={1} className="flex-shrink-0">
+                    <Link href="/nikkah-dupatta/1" className="group block">
+                      <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                        {product.images[0] && (
+                          <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                            <Image
+                              src={product.images[0]}
+                              alt={product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                          <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
+                          <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                        </div>
                       </div>
-                    )}
+                    </Link>
+                  </div>
+                );
+              })()}
+              {/* Card 2: product id 2 */}
+              {(() => {
+                const product = products.find((p) => p.id === 2);
+                if (!product) return null;
+                return (
+                  <div key={2} className="flex-shrink-0">
+                    <Link href="/nikkah-dupatta/2" className="group block">
+                      <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                        {product.images[0] && (
+                          <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                            <Image
+                              src={product.images[0]}
+                              alt={product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                          <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
+                          <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })()}
+              {/* Card 3: product id 3 */}
+              {(() => {
+                const product = products.find((p) => p.id === 3);
+                if (!product) return null;
+                return (
+                  <div key={3} className="flex-shrink-0">
+                    <Link href="/nikkah-dupatta/3" className="group block">
+                      <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                        {product.images[0] && (
+                          <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                            <Image
+                              src={product.images[0]}
+                              alt={product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                          <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
+                          <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })()}
+              {/* New Card (was Card 6) - positioned at Card 4 */}
+              <div key="empty-card" className="flex-shrink-0">
+                <Link href="/nikkah-dupatta/new-card" className="group block">
+                  <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                    <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                      <Image
+                        src="/images/dupta_bunches/1.jpg"
+                        alt="Fancy Bunches Patch Work Dupatta"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
-                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
-                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Fancy Bunches Patch Work Dupatta</h3>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 20000</p>
                     </div>
                   </div>
                 </Link>
-              );
-            })}
+              </div>
+              {/* Previous Card 4: product id 4 */}
+              {(() => {
+                const product = products.find((p) => p.id === 4);
+                if (!product) return null;
+                return (
+                  <div key={4} className="flex-shrink-0">
+                    <Link href="/nikkah-dupatta/4" className="group block">
+                      <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                        {product.images[0] && (
+                          <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                            <Image
+                              src={product.images[0]}
+                              alt={product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                          <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
+                          <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })()}
+              {/* Previous Card 5: product id 5 */}
+              {(() => {
+                const product = products.find((p) => p.id === 5);
+                if (!product) return null;
+                return (
+                  <div key={5} className="flex-shrink-0">
+                    <Link href="/nikkah-dupatta/5" className="group block">
+                      <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                        {product.images[0] && (
+                          <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                            <Image
+                              src={product.images[0]}
+                              alt={product.name}
+                              fill
+                              className="object-cover"
+                            />
+                          </div>
+                        )}
+                        <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                          <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
+                          <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                        </div>
+                      </div>
+                    </Link>
+                  </div>
+                );
+              })()}
+            </div>
+
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full p-2 shadow-md opacity-100 group-hover/arrows:opacity-100 transition-opacity duration-300 hover:bg-white"
+              onClick={() => {
+                const container = document.querySelector('.products-row');
+                if (container) container.scrollTo({ left: container.scrollLeft + container.clientWidth / 1.5, behavior: 'smooth' });
+              }}
+              aria-label="Scroll right"
+            >
+              <svg className="w-5 h-5 text-[#7A1F2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
           </div>
         </div>
       </section>
 
-      {/* 3. Why Choose Wahi Section */}
+      {/* 3. Bride Lehnga Section */}
+      <section className="-mt-12 pb-0 bg-[#FAF6F1]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center mb-12 md:mb-16 text-center">
+            <h2 className="font-heading text-4xl md:text-5xl text-[#7A1F2B] mb-4">Bride Lehnga</h2>
+            <div className="h-px w-24 bg-[#C9A66B]" />
+          </div>
+        </div>
+      </section>
+
+      {/* Why Choose Wahi Section */}
       <section className="py-20 bg-[#7A1F2B] text-[#FAF6F1]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-12 md:gap-8">

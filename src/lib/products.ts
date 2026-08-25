@@ -50,57 +50,57 @@ export const products: Product[] = [
   },
   {
     id: 3,
-    name: "Aisha Sitara Dupatta",
+    name: "Kundan Lace Duptta",
     images: [
       "/images/dupta_3/1.jpg",
       "/images/dupta_3/2.jpg",
       "/images/dupta_3/3.jpg",
       "/images/dupta_3/4.jpg"
     ],
-    length: "105 inches",
-    width: "40 inches",
-    totalFabric: "2 yards",
-    fabricType: "Chiffon",
-    laceDesign: "Pearl Border",
-    sitaraWork: "Medium Sitara Work",
+    length: "3 gaz",
+    width: "3 gaz",
+    totalFabric: "2.5 gaz",
+    fabricType: "Net",
+    laceDesign: "Kundan Lace",
+    sitaraWork: "Including",
     color: "Ivory",
-    price: 12500
+    price: 10000
   },
   {
     id: 4,
-    name: "Noor Custom Veil",
+    name: "Organza Fancy Cutwork Lace Dupatta",
     images: [
-      "/images/dupta_2/3.jpg",
-      "/images/dupta_2/4.jpg",
-      "/images/dupta_1/15eb614f-bd1e-4ac0-9a45-898416f6543a.jpg",
-      "/images/dupta_1/732d1b57-8e7d-4a23-9197-f373ad1e445d.jpg"
+      "/images/dupta_4/1.jpg",
+      "/images/dupta_4/2.jpg",
+      "/images/dupta_4/3.jpg",
+      "/images/dupta_4/4.jpg"
     ],
-    length: "108 inches",
-    width: "42 inches",
-    totalFabric: "2.5 yards",
+    length: "3 gaz",
+    width: "4.5 gaz",
+    totalFabric: "9 gaz",
     fabricType: "Organza",
-    laceDesign: "Zardozi Border",
+    laceDesign: "Fancy Cutwork Lace",
     sitaraWork: "No Sitara Work",
-    color: "White",
-    price: 18000
+    color: "Ivory",
+    price: 10000
   },
   {
     id: 5,
-    name: "Sana Elegance Dupatta",
+    name: "Kashees Kiran Lace Dupatta",
     images: [
-      "/images/dupta_2/1.jpg",
-      "/images/dupta_2/2.jpg",
-      "/images/dupta_2/3.jpg",
-      "/images/dupta_2/4.jpg"
+      "/images/dupta_5/1.jpg",
+      "/images/dupta_5/2.jpg",
+      "/images/dupta_5/3.jpg",
+      "/images/dupta_5/4.jpg"
     ],
-    length: "112 inches",
-    width: "48 inches",
-    totalFabric: "3.5 yards",
+    length: "3 gaz",
+    width: "4.5 gaz",
+    totalFabric: "9 gaz",
     fabricType: "Net",
-    laceDesign: "Floral Lace",
-    sitaraWork: "Heavy Sitara Work",
-    color: "Red",
-    price: 35000
+    laceDesign: "Kashees Kiran Lace",
+    sitaraWork: "Including",
+    color: "Ivory",
+    price: 9999
   },
   {
     id: 6,
