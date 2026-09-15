@@ -36,17 +36,16 @@ export const products: Product[] = [
     images: [
       "/images/dupta_2/1.jpg",
       "/images/dupta_2/2.jpg",
-      "/images/dupta_2/3.jpg",
       "/images/dupta_2/4.jpg"
     ],
     length: "3 gaz",
     width: "4.5 gaz",
     totalFabric: "9 gaz",
     fabricType: "Net",
-    laceDesign: "Luxury Kashees Lace",
+    laceDesign: "Kiran Lace",
     sitaraWork: "Light Sitara Work",
     color: "Gold",
-    price: 9000
+    price: 5500
   },
   {
     id: 3,
@@ -104,56 +103,75 @@ export const products: Product[] = [
   },
   {
     id: 6,
-    name: "Hoor Classic Dupatta",
+    name: "Luxury Kashees Lace Net Dupatta",
     images: [
-      "/images/dupta_1/c785c36a-16bd-49c8-9b4c-d97918357828.jpg",
-      "/images/dupta_2/1.jpg",
-      "/images/dupta_2/2.jpg",
-      "/images/dupta_2/3.jpg"
+      "/images/dupta_six/1.jpg",
+      "/images/dupta_six/2.jpg",
+      "/images/dupta_six/3.jpg",
+      "/images/dupta_six/4.jpg"
     ],
-    length: "100 inches",
-    width: "38 inches",
-    totalFabric: "1.8 yards",
-    fabricType: "Chiffon",
-    laceDesign: "Kiran Lace",
-    sitaraWork: "Light Sitara Work",
-    color: "Maroon",
-    price: 9500
+    length: "3 gaz",
+    width: "4.5 gaz",
+    totalFabric: "9 gaz",
+    fabricType: "Net",
+    laceDesign: "Luxury Kashees Lace",
+    sitaraWork: "Including",
+    color: "Ivory",
+    price: 9000
   },
   {
     id: 7,
-    name: "Zainab Signature",
+    name: "Barik Lace Net Dupatta",
     images: [
-      "/images/dupta_2/4.jpg",
-      "/images/dupta_2/1.jpg",
-      "/images/dupta_2/2.jpg",
-      "/images/dupta_2/3.jpg"
+      "/images/dupta_7/1.jpg",
+      "/images/dupta_7/2.jpg",
+      "/images/dupta_7/3.jpg",
+      "/images/dupta_7/4.jpg"
     ],
-    length: "108 inches",
-    width: "42 inches",
-    totalFabric: "2.8 yards",
-    fabricType: "Silk",
-    laceDesign: "Minimalist Border",
-    sitaraWork: "Medium Sitara Work",
-    color: "Gold",
-    price: 28000
+    length: "3.5 gaz",
+    width: "3.5 gaz",
+    totalFabric: "7 gaz",
+    fabricType: "Net",
+    laceDesign: "Barik Lace",
+    sitaraWork: "Including",
+    color: "Ivory",
+    price: 4500
   },
   {
     id: 8,
-    name: "Maryam Royal Veil",
+    name: "Heavy Cutwork Lace Net Dupatta",
     images: [
-      "/images/dupta_1/732d1b57-8e7d-4a23-9197-f373ad1e445d.jpg",
-      "/images/dupta_1/c785c36a-16bd-49c8-9b4c-d97918357828.jpg",
-      "/images/dupta_2/1.jpg",
-      "/images/dupta_2/2.jpg"
+      "/images/dupta_eight/1.jpg",
+      "/images/dupta_eight/2.jpg",
+      "/images/dupta_eight/3.jpg",
+      "/images/dupta_eight/4.jpg",
+      "/images/dupta_eight/5.jpg",
+      "/images/dupta_eight/6.mp4"
     ],
-    length: "115 inches",
-    width: "48 inches",
-    totalFabric: "4 yards",
-    fabricType: "Organza",
-    laceDesign: "Scalloped Lace",
-    sitaraWork: "Heavy Sitara Work",
+    length: "4 gaz",
+    width: "4 gaz",
+    totalFabric: "12 gaz",
+    fabricType: "High Quality Net",
+    laceDesign: "Heavy Cutwork Lace",
+    sitaraWork: "Including",
     color: "Ivory",
-    price: 45000
+    price: 25000
+  },
+  {
+    id: 999,
+    name: "Fancy Bunches Patch Work Dupatta",
+    images: [
+      "/images/dupta_bunches/1.jpg",
+      "/images/dupta_bunches/2.jpg",
+      "/images/dupta_bunches/3.jpg"
+    ],
+    length: "4 gaz",
+    width: "4.5 gaz",
+    totalFabric: "12 gaz",
+    fabricType: "Organza",
+    laceDesign: "Fancy Bunches Patch Work",
+    sitaraWork: "Including",
+    color: "Ivory",
+    price: 20000
   }
 ];

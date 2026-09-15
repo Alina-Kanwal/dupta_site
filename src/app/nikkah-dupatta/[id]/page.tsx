@@ -9,7 +9,6 @@ import { products } from "@/lib/products";
 import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 
-const COLOR_OPTIONS = [...new Set(products.map((p) => p.color))];
 
 const NAME_OPTIONS = [
   { id: "embroidery", label: "Embroidery Name", charge: 1000 },
@@ -76,14 +75,15 @@ export default function ProductDetailPage() {
             {/* Vertical thumbnail strip — same 4:5 ratio as main, fixed width */}
             {product.images.length > 1 && (
               <div className="flex flex-col gap-2 flex-shrink-0">
-                {product.images.map((_, index) => {
+                {product.images.map((src, index) => {
                   const isActive = activeImageIndex === index;
+                  const isVideo = src.endsWith(".mp4");
                   return (
                     <button
                       key={index}
                       type="button"
                       onClick={() => setActiveImageIndex(index)}
-                      aria-label={`View image ${index + 1}`}
+                      aria-label={`View ${isVideo ? "video" : "image"} ${index + 1}`}
                       aria-pressed={isActive}
                       className={`relative w-16 sm:w-20 aspect-[4/5] flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-[#E8C4C4]/20 ${
                         isActive
@@ -91,29 +91,46 @@ export default function ProductDetailPage() {
                           : "border-[#E8D9D3] hover:border-[#C9A66B]"
                       }`}
                     >
-                      <Image
-                        src={_}
-                        alt={`${product.name} thumbnail ${index + 1}`}
-                        fill
-                        className="object-cover"
-                        sizes="80px"
-                      />
+                      {isVideo ? (
+                        <div className="w-full h-full flex items-center justify-center bg-[#2B2320]/10">
+                          <svg className="w-6 h-6 text-[#7A1F2B]" fill="currentColor" viewBox="0 0 24 24">
+                            <path d="M8 5v14l11-7z"/>
+                          </svg>
+                        </div>
+                      ) : (
+                        <Image
+                          src={src}
+                          alt={`${product.name} thumbnail ${index + 1}`}
+                          fill
+                          className="object-cover"
+                          sizes="80px"
+                        />
+                      )}
                     </button>
                   );
                 })}
               </div>
             )}
 
-            {/* Main image display — 4:5 portrait, full image visible */}
+            {/* Main display — 4:5 portrait */}
             <div className="relative flex-1 aspect-[4/5] overflow-hidden rounded-2xl bg-[#E8C4C4]/20 shadow-sm">
               {product.images[activeImageIndex] && (
-                <Image
-                  src={product.images[activeImageIndex]}
-                  alt={`${product.name} view ${activeImageIndex + 1}`}
-                  fill
-                  className="object-contain"
-                  priority
-                />
+                product.images[activeImageIndex].endsWith(".mp4") ? (
+                  <video
+                    src={product.images[activeImageIndex]}
+                    className="w-full h-full object-contain"
+                    controls
+                    playsInline
+                  />
+                ) : (
+                  <Image
+                    src={product.images[activeImageIndex]}
+                    alt={`${product.name} view ${activeImageIndex + 1}`}
+                    fill
+                    className="object-contain"
+                    priority
+                  />
+                )
               )}
             </div>
           </div>
@@ -130,7 +147,7 @@ export default function ProductDetailPage() {
               <DetailRow label="Total Fabric"  value={product.totalFabric} />
               <DetailRow label="Fabric Type"   value={product.fabricType} />
               <DetailRow label="Design of Lace" value={product.laceDesign} />
-              <DetailRow label="Sitara Work"   value={product.id <= 3 ? "Including" : product.sitaraWork} />
+              <DetailRow label="Sitara Work"   value={product.sitaraWork} />
 
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-2">
                 <span className="font-body text-sm font-medium text-[#2B2320]/70">Color</span>
@@ -139,9 +156,7 @@ export default function ProductDetailPage() {
                   onChange={(e) => setSelectedColor(e.target.value)}
                   className="w-full md:w-48 px-4 py-2.5 rounded-xl border border-[#E8D9D3] bg-white font-body text-sm text-[#2B2320] focus:outline-none focus:border-[#C9A66B] focus:ring-1 focus:ring-[#C9A66B] transition-all"
                 >
-                  {COLOR_OPTIONS.map((color) => (
-                    <option key={color} value={color}>{color}</option>
-                  ))}
+                  <option value={product.color}>{product.color}</option>
                 </select>
               </div>
 
