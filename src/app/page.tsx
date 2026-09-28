@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star, Truck, Scissors, Sparkles, Medal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { products } from "@/lib/products";
 
 
@@ -21,44 +21,95 @@ const TESTIMONIALS = [
   { id: 3, name: "Sara M.", review: "The fabric felt so premium and the delivery was right on time. Highly recommended for every bride to be.", rating: 5 },
 ];
 
-export default function Home() {
-  return (
-    <div className="flex flex-col min-h-screen">
-      {/* 1. Hero Section */}
-      <section className="relative w-full h-[85vh] min-h-[500px] flex items-center justify-center overflow-hidden">
-        {/* Background Image */}
-        <div className="absolute inset-0 z-0">
-          <Image
-            src="https://images.unsplash.com/photo-1583391733958-d259779383e5?w=1600&auto=format&fit=crop&q=80"
-            alt="Bride wearing a beautifully crafted Nikkah dupatta"
-            fill
-            className="object-cover object-top"
-            priority
-          />
-          {/* Dark Overlay for readability */}
-          <div className="absolute inset-0 bg-gradient-to-b from-[#2B2320]/40 via-[#2B2320]/50 to-[#2B2320]/80" />
-        </div>
+// ─── Hero Slideshow Images ───────────────────────────────────────────────────
+// Add image paths here when ready, e.g. "/images/hero/one.jpg"
+// Supported formats: .jpg, .jpeg, .png, .webp
+const HOME_IMAGES: string[] = [
+  "/images/home_imgs/1.jpeg",
+  "/images/home_imgs/2.jpeg",
+  "/images/home_imgs/3.jpeg",
+  "/images/home_imgs/4.jpeg",
+  "/images/home_imgs/5.jpeg",
+  "/images/home_imgs/6.jpeg",
+  "/images/home_imgs/7.jpeg",
+];
 
-        {/* Hero Content */}
-        <div className="relative z-10 flex flex-col items-center text-center px-4 max-w-4xl mx-auto space-y-6 mt-16 md:mt-0">
-          <h1 className="font-heading text-6xl md:text-8xl lg:text-9xl text-[#FAF6F1] leading-none drop-shadow-lg">
-            Wahi
-          </h1>
+function HeroSlideshow() {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    const id = setInterval(() => setCurrent((p) => (p + 1) % HOME_IMAGES.length), 4000);
+    return () => clearInterval(id);
+  }, []);
+
+  return <HeroSlideshowClient images={HOME_IMAGES} current={current} setCurrent={setCurrent} />;
+}
+
+function HeroSlideshowClient({
+  images,
+  current,
+  setCurrent,
+}: {
+  images: string[];
+  current: number;
+  setCurrent: (n: number | ((p: number) => number)) => void;
+}) {
+  return (
+    <section className="relative w-full overflow-hidden">
+      {/* Images at natural size — no cropping */}
+      <div className="relative w-full">
+        {images.map((src, i) => (
+          <div
+            key={src}
+            className={`transition-opacity duration-1000 ${
+              i === 0 ? "relative w-full" : "absolute top-0 left-0 w-full h-full"
+            } ${i === current ? "opacity-100" : "opacity-0"}`}
+          >
+            <Image
+              src={src}
+              alt={`Hero image ${i + 1}`}
+              width={1600}
+              height={1113}
+              className="w-full h-auto block"
+              priority={i === 0}
+              sizes="100vw"
+            />
+          </div>
+        ))}
+      </div>
+      <div className="absolute inset-0 z-10 bg-gradient-to-b from-[#2B2320]/40 via-[#2B2320]/50 to-[#2B2320]/80" />
+      <div className="absolute inset-0 z-20 flex flex-col items-center justify-center text-center px-4">
+        <div className="max-w-4xl mx-auto space-y-6">
+          <h1 className="font-heading text-6xl md:text-8xl lg:text-9xl text-[#FAF6F1] leading-none drop-shadow-lg">Wahi</h1>
           <p className="font-body text-lg md:text-xl text-[#FAF6F1]/90 max-w-2xl leading-relaxed drop-shadow-md font-light">
             Customize your Nikkah dupatta and make your wedding day special
           </p>
           <div className="pt-4">
             <Link href="/">
-              <Button
-                size="lg"
-                className="bg-[#C9A66B] text-[#2B2320] hover:bg-[#D9BC8F] font-body font-semibold rounded-xl px-10 h-14 text-lg transition-all duration-300 shadow-[0_4px_14px_rgba(201,166,107,0.4)] hover:shadow-[0_6px_20px_rgba(201,166,107,0.6)] hover:-translate-y-0.5"
-              >
+              <Button size="lg" className="bg-[#C9A66B] text-[#2B2320] hover:bg-[#D9BC8F] font-body font-semibold rounded-xl px-10 h-14 text-lg transition-all duration-300 shadow-[0_4px_14px_rgba(201,166,107,0.4)] hover:shadow-[0_6px_20px_rgba(201,166,107,0.6)] hover:-translate-y-0.5">
                 Shop Now
               </Button>
             </Link>
           </div>
         </div>
-      </section>
+      </div>
+      <div className="absolute bottom-6 left-1/2 -translate-x-1/2 z-20 flex gap-2">
+        {images.map((_, i) => (
+          <button key={i} onClick={() => setCurrent(i)} aria-label={`Slide ${i + 1}`}
+            className={`h-2 rounded-full transition-all duration-300 ${i === current ? "bg-[#C9A66B] w-5" : "bg-white/50 w-2"}`}
+          />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default function Home() {
+  return (
+    <div className="flex flex-col min-h-screen">
+      {/* 1. Hero Section */}
+      <HeroSlideshow />
+
 
       {/* 2. Featured/New Arrivals Section */}
       <section className="py-20 md:py-32 bg-[#FAF6F1]">
@@ -345,14 +396,166 @@ export default function Home() {
       </section>
 
       {/* 3. Bride Lehnga Section */}
-      <section className="-mt-12 pb-0 bg-[#FAF6F1]">
+      <section className="-mt-16 pt-0 pb-20 bg-[#FAF6F1]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col items-center mb-12 md:mb-16 text-center">
+          <div className="flex flex-col items-center mb-8 text-center">
             <h2 className="font-heading text-4xl md:text-5xl text-[#7A1F2B] mb-4">Bride Lehnga</h2>
             <div className="h-px w-24 bg-[#C9A66B]" />
           </div>
+
+          <div className="relative group/arrows">
+            <button
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full p-2 shadow-md opacity-100 group-hover/arrows:opacity-100 transition-opacity duration-300 hover:bg-white"
+              onClick={() => {
+                const container = document.querySelector('.lehenga-row');
+                if (container) container.scrollTo({ left: container.scrollLeft - container.clientWidth / 1.5, behavior: 'smooth' });
+              }}
+              aria-label="Scroll left"
+            >
+              <svg className="w-5 h-5 text-[#7A1F2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <div className="lehenga-row flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto hide-scrollbar">
+              {/* Lehenga Card 1 */}
+              <div className="flex-shrink-0">
+                <Link href="/bridal-lehenga/1" className="group block">
+                  <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                    <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                      <Image
+                        src="/images/lehnga_1/1.jpg"
+                        alt="Bridal Lehenga 1"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Bridal Lehenga 1</h3>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 30,000</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Lehenga Card 2 */}
+              <div className="flex-shrink-0">
+                <Link href="/bridal-lehenga/2" className="group block">
+                  <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                    <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                      <Image
+                        src="/images/lehnga_2/1.jpg"
+                        alt="Bridal Lehenga 2"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Bridal Lehenga 2</h3>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Contact for Price</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full p-2 shadow-md opacity-100 group-hover/arrows:opacity-100 transition-opacity duration-300 hover:bg-white"
+              onClick={() => {
+                const container = document.querySelector('.lehenga-row');
+                if (container) container.scrollTo({ left: container.scrollLeft + container.clientWidth / 1.5, behavior: 'smooth' });
+              }}
+              aria-label="Scroll right"
+            >
+              <svg className="w-5 h-5 text-[#7A1F2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
         </div>
       </section>
+
+
+      {/* Winter Collection Section */}
+      <section className="-mt-4 pt-10 pb-20 bg-[#FAF6F1]">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="flex flex-col items-center mb-12 md:mb-16 text-center">
+            <h2 className="font-heading text-4xl md:text-5xl text-[#7A1F2B] mb-4">Winter Collection</h2>
+            <div className="h-px w-24 bg-[#C9A66B]" />
+          </div>
+
+          <div className="relative group/arrows">
+            <button
+              className="absolute left-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full p-2 shadow-md opacity-100 group-hover/arrows:opacity-100 transition-opacity duration-300 hover:bg-white"
+              onClick={() => {
+                const container = document.querySelector('.winter-row');
+                if (container) container.scrollTo({ left: container.scrollLeft - container.clientWidth / 1.5, behavior: 'smooth' });
+              }}
+              aria-label="Scroll left"
+            >
+              <svg className="w-5 h-5 text-[#7A1F2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 19l-7-7 7-7" />
+              </svg>
+            </button>
+
+            <div className="winter-row flex gap-4 md:gap-6 lg:gap-8 overflow-x-auto hide-scrollbar">
+              {/* Winter Card 1 */}
+              <div className="flex-shrink-0">
+                <Link href="/winter-collection/1" className="group block">
+                  <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                    <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                      <Image
+                        src="/images/dress/dress_1/0.jpg"
+                        alt="Winter Collection 1"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Winter Collection 1</h3>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Contact for Price</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+
+              {/* Winter Card 2 */}
+              <div className="flex-shrink-0">
+                <Link href="/winter-collection/2" className="group block">
+                  <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300 w-[280px]">
+                    <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
+                      <Image
+                        src="/images/dress/dress_2/1.jpg"
+                        alt="Winter Collection 2"
+                        fill
+                        className="object-cover"
+                      />
+                    </div>
+                    <div className="p-4 md:p-5 flex flex-col gap-1.5">
+                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Winter Collection 2</h3>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Contact for Price</p>
+                    </div>
+                  </div>
+                </Link>
+              </div>
+            </div>
+
+            <button
+              className="absolute right-2 top-1/2 -translate-y-1/2 z-20 bg-white/90 rounded-full p-2 shadow-md opacity-100 group-hover/arrows:opacity-100 transition-opacity duration-300 hover:bg-white"
+              onClick={() => {
+                const container = document.querySelector('.winter-row');
+                if (container) container.scrollTo({ left: container.scrollLeft + container.clientWidth / 1.5, behavior: 'smooth' });
+              }}
+              aria-label="Scroll right"
+            >
+              <svg className="w-5 h-5 text-[#7A1F2B]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M9 5l7 7-7 7" />
+              </svg>
+            </button>
+          </div>
+        </div>
+      </section>
+
 
       {/* Why Choose Wahi Section */}
       <section className="py-20 bg-[#7A1F2B] text-[#FAF6F1]">

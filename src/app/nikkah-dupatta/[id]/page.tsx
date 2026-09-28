@@ -44,10 +44,25 @@ export default function ProductDetailPage() {
     return <div>Loading...</div>;
   }
 
+  // Color customization charge logic
+  // Cards 1, 3, 5 → free (no charge)
+  // Card 8         → Rs. 500
+  // All others     → Rs. 1000
+  const COLOR_FREE_IDS  = [1, 3, 5];
+  const colorCharge =
+    COLOR_FREE_IDS.includes(product.id)
+      ? 0
+      : product.id === 8
+      ? 500
+      : 1000;
+
+  const isColorChanged = selectedColor !== product.color;
+
   const nameCharge = addName && nameOption
     ? NAME_OPTIONS.find((o) => o.id === nameOption)?.charge ?? 0
     : 0;
-  const totalPrice = product.price + nameCharge;
+  const appliedColorCharge = isColorChanged ? colorCharge : 0;
+  const totalPrice = product.price + nameCharge + appliedColorCharge;
 
   const handleAddNameToggle = (checked: boolean) => {
     setAddName(checked);
@@ -149,16 +164,36 @@ export default function ProductDetailPage() {
               <DetailRow label="Design of Lace" value={product.laceDesign} />
               <DetailRow label="Sitara Work"   value={product.sitaraWork} />
 
-              <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-2">
-                <span className="font-body text-sm font-medium text-[#2B2320]/70">Color</span>
-                <select
-                  value={selectedColor}
-                  onChange={(e) => setSelectedColor(e.target.value)}
-                  className="w-full md:w-48 px-4 py-2.5 rounded-xl border border-[#E8D9D3] bg-white font-body text-sm text-[#2B2320] focus:outline-none focus:border-[#C9A66B] focus:ring-1 focus:ring-[#C9A66B] transition-all"
-                >
-                  <option value={product.color}>{product.color}</option>
-                </select>
+
+              {/* ── Color Selection ── */}
+              <div className="flex flex-col gap-2 pt-2">
+                <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2">
+                  <span className="font-body text-sm font-medium text-[#2B2320]/70">Color</span>
+                  <select
+                    value={selectedColor}
+                    onChange={(e) => setSelectedColor(e.target.value)}
+                    className="w-full md:w-48 px-4 py-2.5 rounded-xl border border-[#E8D9D3] bg-white font-body text-sm text-[#2B2320] focus:outline-none focus:border-[#C9A66B] focus:ring-1 focus:ring-[#C9A66B] transition-all"
+                  >
+                    <option value="">Select a color</option>
+                    {["White", "Ivory", "Red", "Maroon", "Pink", "Peach", "Golden", "Silver", "Green", "Black"].map((color) => (
+                      <option key={color} value={color}>{color}</option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Color charge notice — always visible for cards with a charge */}
+                {colorCharge > 0 && (
+                  <div className="rounded-xl px-4 py-3 text-sm font-body border border-[#E8D9D3] bg-[#FAF6F1] text-[#2B2320]">
+                    <span className="font-semibold text-[#7A1F2B]">⚠ Color Customization Charges: Rs. {colorCharge.toLocaleString()}</span>
+                    <span className="block text-xs text-[#2B2320]/60 mt-0.5">
+                      {isColorChanged
+                        ? `Rs. ${colorCharge.toLocaleString()} has been added to your order total.`
+                        : "Selecting a different color will add this charge to your order."}
+                    </span>
+                  </div>
+                )}
               </div>
+
 
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-2 border-t border-[#E8D9D3]">
                 <span className="font-body text-sm font-medium text-[#2B2320]/70">Base Price</span>
@@ -281,8 +316,8 @@ export default function ProductDetailPage() {
               {/* Dynamic total */}
               <div className="flex items-center justify-between px-1">
                 <span className="font-body text-sm font-medium text-[#2B2320]/70">Total</span>
-                <div className="flex items-baseline gap-2">
-                  {nameCharge > 0 && (
+                <div className="flex items-baseline gap-2 flex-wrap justify-end">
+                  {(nameCharge > 0 || appliedColorCharge > 0) && (
                     <span className="font-body text-xs text-[#2B2320]/40 line-through">
                       Rs. {product.price.toLocaleString()}
                     </span>
@@ -293,6 +328,11 @@ export default function ProductDetailPage() {
                   {nameCharge > 0 && (
                     <span className="font-body text-xs text-[#7A1F2B] bg-[#7A1F2B]/10 rounded-full px-2 py-0.5 font-medium">
                       +Rs. {nameCharge.toLocaleString()} name
+                    </span>
+                  )}
+                  {appliedColorCharge > 0 && (
+                    <span className="font-body text-xs text-[#7A1F2B] bg-[#7A1F2B]/10 rounded-full px-2 py-0.5 font-medium">
+                      +Rs. {appliedColorCharge.toLocaleString()} color
                     </span>
                   )}
                 </div>
