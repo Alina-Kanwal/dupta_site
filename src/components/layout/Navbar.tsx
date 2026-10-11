@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShoppingBag, Search, Menu, X } from "lucide-react";
+import { ShoppingBag, Search, Menu, ChevronDown, ChevronRight } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -25,10 +25,11 @@ const COLLECTIONS = [
 ];
 
 export default function Navbar() {
-  const [cartCount, setCartCount]   = useState(0);
+  const [cartCount]                 = useState(0);
   const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [collectionsOpen, setCollectionsOpen] = useState(false);
+  const [desktopCollectionsOpen, setDesktopCollectionsOpen] = useState(false);
+  const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(true);
 
   /* Add shadow on scroll */
   useEffect(() => {
@@ -37,23 +38,46 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  /* Handle clicks outside dropdown */
+  /* Handle clicks outside desktop dropdown */
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (collectionsOpen) {
+      if (desktopCollectionsOpen) {
         const target = event.target as HTMLElement;
         if (
           target &&
           !target.closest('#collections-dropdown-btn') &&
           !target.closest('#collections-dropdown-panel')
         ) {
-          setCollectionsOpen(false);
+          setDesktopCollectionsOpen(false);
         }
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [collectionsOpen]);
+  }, [desktopCollectionsOpen]);
+
+  /* Close mobile drawer on desktop resize */
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth >= 768) {
+        setMobileOpen(false);
+      }
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
+  /* Close on Escape key */
+  useEffect(() => {
+    const handleEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setDesktopCollectionsOpen(false);
+        setMobileOpen(false);
+      }
+    };
+    document.addEventListener("keydown", handleEscape);
+    return () => document.removeEventListener("keydown", handleEscape);
+  }, []);
 
   return (
     <header
@@ -64,17 +88,17 @@ export default function Navbar() {
           : "border-b border-[#E8D9D3]"
       )}
     >
-      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-        <div className="flex h-16 md:h-20 items-center justify-between gap-4">
+      <div className="mx-auto max-w-7xl px-3 sm:px-6 lg:px-8">
+        <div className="flex h-16 md:h-20 items-center justify-between gap-2 sm:gap-4">
 
           {/* ── Logo ─────────────────────────────────────────── */}
           <Link
             href="/"
-            className="flex-shrink-0 flex flex-col leading-none group"
+            className="flex-shrink-0 flex flex-col leading-none group py-1"
             aria-label="Wahi — Home"
           >
             <span
-              className="font-heading text-3xl md:text-4xl text-[#7A1F2B] tracking-tight
+              className="font-heading text-2xl sm:text-3xl md:text-4xl text-[#7A1F2B] tracking-tight
                          group-hover:text-[#9B2B3A] transition-colors duration-200"
             >
               Wahi
@@ -106,9 +130,10 @@ export default function Navbar() {
             <div className="relative">
               <button
                 id="collections-dropdown-btn"
+                type="button"
                 onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
                   e.stopPropagation();
-                  setCollectionsOpen(!collectionsOpen);
+                  setDesktopCollectionsOpen((prev) => !prev);
                 }}
                 className="relative flex items-center px-4 py-2 font-body text-sm font-medium text-[#2B2320]
                            hover:text-[#7A1F2B] transition-colors duration-200
@@ -117,22 +142,29 @@ export default function Navbar() {
                            after:transition-transform after:duration-300 after:origin-left"
                 aria-label="Collections dropdown"
                 aria-haspopup="true"
-                aria-expanded={collectionsOpen}
+                aria-expanded={desktopCollectionsOpen}
               >
                 Collections
-                <svg className="ml-2 h-3 w-3 transition-transform duration-200"
-                     fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"
-                     style={{ transform: collectionsOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                </svg>
+                <ChevronDown
+                  className={cn(
+                    "ml-1.5 h-3.5 w-3.5 transition-transform duration-200",
+                    desktopCollectionsOpen ? "rotate-180" : "rotate-0"
+                  )}
+                />
               </button>
-              <div id="collections-dropdown-panel" className={`absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-[#E8D9D3] z-20 ${collectionsOpen ? 'block' : 'hidden'}`}>
+              <div
+                id="collections-dropdown-panel"
+                className={cn(
+                  "absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-[#E8D9D3] z-20 py-1 transition-all duration-150",
+                  desktopCollectionsOpen ? "block" : "hidden"
+                )}
+              >
                 {COLLECTIONS.map(({ label, href }) => (
                   <Link
                     key={href}
                     href={href}
-                    onClick={() => setCollectionsOpen(false)}
-                    className="block px-4 py-2 text-sm text-[#2B2320] hover:bg-[#E8C4C4]/50 hover:text-[#7A1F2B]"
+                    onClick={() => setDesktopCollectionsOpen(false)}
+                    className="block px-4 py-2 text-sm text-[#2B2320] hover:bg-[#E8C4C4]/50 hover:text-[#7A1F2B] transition-colors"
                   >
                     {label}
                   </Link>
@@ -142,14 +174,15 @@ export default function Navbar() {
           </nav>
 
           {/* ── Right-side Icons ──────────────────────────────── */}
-          <div className="flex items-center gap-1 sm:gap-2">
+          <div className="flex items-center gap-0.5 sm:gap-2">
 
             {/* Search */}
             <button
               id="navbar-search-btn"
+              type="button"
               aria-label="Search"
-              className="p-2.5 rounded-lg text-[#2B2320] hover:text-[#7A1F2B]
-                         hover:bg-[#E8C4C4]/30 transition-all duration-200"
+              className="p-2 sm:p-2.5 rounded-lg text-[#2B2320] hover:text-[#7A1F2B]
+                         hover:bg-[#E8C4C4]/30 active:bg-[#E8C4C4]/50 transition-all duration-200"
             >
               <Search className="w-5 h-5" strokeWidth={1.75} />
             </button>
@@ -159,8 +192,8 @@ export default function Navbar() {
               href="/cart"
               id="navbar-cart-btn"
               aria-label={`Cart — ${cartCount} item${cartCount !== 1 ? "s" : ""}`}
-              className="relative p-2.5 rounded-lg text-[#2B2320] hover:text-[#7A1F2B]
-                         hover:bg-[#E8C4C4]/30 transition-all duration-200"
+              className="relative p-2 sm:p-2.5 rounded-lg text-[#2B2320] hover:text-[#7A1F2B]
+                         hover:bg-[#E8C4C4]/30 active:bg-[#E8C4C4]/50 transition-all duration-200"
             >
               <ShoppingBag className="w-5 h-5" strokeWidth={1.75} />
               {cartCount > 0 && (
@@ -180,23 +213,23 @@ export default function Navbar() {
                 <SheetTrigger
                   id="navbar-mobile-menu-btn"
                   aria-label="Open menu"
-                  className="p-2.5 rounded-lg text-[#2B2320] hover:text-[#7A1F2B]
-                             hover:bg-[#E8C4C4]/30 transition-all duration-200"
+                  className="p-2 sm:p-2.5 rounded-lg text-[#2B2320] hover:text-[#7A1F2B]
+                             hover:bg-[#E8C4C4]/30 active:bg-[#E8C4C4]/50 transition-all duration-200"
                 >
                   <Menu className="w-5 h-5" strokeWidth={1.75} />
                 </SheetTrigger>
 
                 <SheetContent
                   side="right"
-                  className="w-[280px] bg-[#FAF6F1] border-l border-[#E8D9D3] p-0"
+                  className="w-[85vw] max-w-[320px] bg-[#FAF6F1] border-l border-[#E8D9D3] p-0 flex flex-col h-full overflow-hidden text-[#2B2320]"
                 >
                   {/* Sheet header */}
-                  <SheetHeader className="px-6 pt-6 pb-4 border-b border-[#E8D9D3]">
-                    <SheetTitle>
+                  <SheetHeader className="px-5 pt-5 pb-4 pr-12 border-b border-[#E8D9D3] flex-shrink-0 text-left">
+                    <SheetTitle className="text-left">
                       <Link
                         href="/"
                         onClick={() => setMobileOpen(false)}
-                        className="font-heading text-3xl text-[#7A1F2B] leading-none"
+                        className="font-heading text-2xl sm:text-3xl text-[#7A1F2B] leading-none block hover:text-[#9B2B3A] transition-colors"
                       >
                         Wahi
                       </Link>
@@ -206,62 +239,82 @@ export default function Navbar() {
                     </p>
                   </SheetHeader>
 
-                  {/* Mobile nav links */}
-                  <nav
-                    className="flex flex-col px-4 py-6 gap-1"
-                    aria-label="Mobile navigation"
-                  >
-                    {NAV_LINKS.map(({ label, href }) => (
-                      <Link
-                        key={href}
-                        href={href}
-                        onClick={() => setMobileOpen(false)}
-                        className="flex items-center gap-3 px-4 py-3.5 rounded-xl font-body
-                                   text-base font-medium text-[#2B2320] hover:text-[#7A1F2B]
-                                   hover:bg-[#E8C4C4]/40 transition-all duration-200"
-                      >
-                        {label}
-                      </Link>
-                    ))}
-                    {/* Mobile Collections Dropdown */}
-                    <div className="border-t border-[#E8D9D3] pt-4">
-                      <button
-                        onClick={(e: React.MouseEvent<HTMLButtonElement>) => setCollectionsOpen(!collectionsOpen)}
-                        className="w-full flex items-center justify-between px-4 py-3.5 rounded-xl font-body
-                                   text-base font-medium text-[#2B2320] hover:text-[#7A1F2B]
-                                   hover:bg-[#E8C4C4]/40 transition-all duration-200"
-                      >
-                        <span>Collections</span>
-                        <svg className="ml-2 h-3 w-3 transition-transform duration-200"
-                             fill="none" stroke="currentColor" viewBox="0 0 24 24" strokeWidth="1.5"
-                             style={{ transform: collectionsOpen ? 'rotate(180deg)' : 'rotate(0deg)' }}>
-                          <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-                        </svg>
-                      </button>
-                      {collectionsOpen && (
-                        <div className="mt-2 space-y-1">
-                          {COLLECTIONS.map(({ label, href }) => (
-                            <Link
-                              key={href}
-                              href={href}
-                              onClick={() => setMobileOpen(false)}
-                              className="px-4 py-3 text-base font-medium text-[#2B2320] hover:text-[#7A1F2B]
-                                         hover:bg-[#E8C4C4]/40 transition-all duration-200"
-                            >
-                              {label}
-                            </Link>
-                          ))}
-                        </div>
-                      )}
-                    </div>
-                  </nav>
+                  {/* Scrollable nav container */}
+                  <div className="flex-1 overflow-y-auto px-4 py-4 flex flex-col justify-between overscroll-contain">
+                    <nav className="flex flex-col gap-1" aria-label="Mobile navigation">
+                      {NAV_LINKS.map(({ label, href }) => (
+                        <Link
+                          key={href}
+                          href={href}
+                          onClick={() => setMobileOpen(false)}
+                          className="flex items-center justify-between px-3.5 py-3 rounded-xl font-body
+                                     text-[15px] font-medium text-[#2B2320] hover:text-[#7A1F2B]
+                                     hover:bg-[#E8C4C4]/30 active:bg-[#E8C4C4]/50 transition-all duration-200 group"
+                        >
+                          <span>{label}</span>
+                          <ChevronRight className="w-4 h-4 text-[#2B2320]/30 group-hover:text-[#7A1F2B] transition-colors" />
+                        </Link>
+                      ))}
 
-                  {/* Divider + tagline */}
-                  <div className="px-6 mt-auto pb-8">
-                    <div className="h-px bg-[#E8D9D3] mb-6" />
-                    <p className="font-body text-xs text-[#2B2320]/50 leading-relaxed">
-                      Customize your Nikkah dupatta and make your wedding day special.
-                    </p>
+                      {/* Mobile Collections Section */}
+                      <div className="mt-2 pt-3 border-t border-[#E8D9D3]">
+                        <button
+                          type="button"
+                          onClick={() => setMobileCollectionsOpen((prev) => !prev)}
+                          className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-body
+                                     text-[15px] font-semibold text-[#7A1F2B] hover:bg-[#E8C4C4]/25
+                                     active:bg-[#E8C4C4]/40 transition-all duration-200"
+                          aria-expanded={mobileCollectionsOpen}
+                          aria-controls="mobile-collections-list"
+                        >
+                          <span className="flex items-center gap-2">
+                            <span>Collections</span>
+                            <span className="text-[10px] font-medium font-body uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#C9A66B]/20 text-[#7A1F2B]">
+                              {COLLECTIONS.length}
+                            </span>
+                          </span>
+                          <ChevronDown
+                            className={cn(
+                              "w-4 h-4 text-[#7A1F2B] transition-transform duration-200",
+                              mobileCollectionsOpen ? "rotate-180" : "rotate-0"
+                            )}
+                          />
+                        </button>
+
+                        {mobileCollectionsOpen && (
+                          <div
+                            id="mobile-collections-list"
+                            className="mt-1 pl-2 pr-1 space-y-1 border-l-2 border-[#C9A66B]/30 ml-3.5 py-1"
+                          >
+                            {COLLECTIONS.map(({ label, href }) => (
+                              <Link
+                                key={href}
+                                href={href}
+                                onClick={() => setMobileOpen(false)}
+                                className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg font-body
+                                           text-sm font-medium text-[#2B2320] hover:text-[#7A1F2B]
+                                           hover:bg-[#E8C4C4]/40 active:bg-[#E8C4C4]/60 transition-all duration-200 group"
+                              >
+                                <span className="flex items-center gap-2.5">
+                                  <span className="w-1.5 h-1.5 rounded-full bg-[#C9A66B] flex-shrink-0" />
+                                  <span className="group-hover:translate-x-0.5 transition-transform duration-150">
+                                    {label}
+                                  </span>
+                                </span>
+                                <ChevronRight className="w-3.5 h-3.5 text-[#C9A66B] opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-150 flex-shrink-0" />
+                              </Link>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+                    </nav>
+
+                    {/* Divider + tagline footer */}
+                    <div className="pt-6 mt-4 border-t border-[#E8D9D3]">
+                      <p className="font-body text-xs text-[#2B2320]/60 leading-relaxed">
+                        Customize your Nikkah dupatta and make your wedding day special.
+                      </p>
+                    </div>
                   </div>
                 </SheetContent>
               </Sheet>
