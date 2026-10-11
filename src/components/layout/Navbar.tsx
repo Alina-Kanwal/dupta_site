@@ -20,7 +20,7 @@ const NAV_LINKS = [
 
 const COLLECTIONS = [
   { label: "Winter Collection", href: "/winter-collection" },
-  { label: "Summer Collection", href: "/summer-collection" },
+  { label: "Bridal Lehnga",     href: "/bridal-lehenga" },
   { label: "Nikkah Dupatta",    href: "/nikkah-dupatta" },
 ];
 

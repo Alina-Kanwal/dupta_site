@@ -72,7 +72,7 @@ export default function WinterTwoDetailPage() {
                   src={ITEM.images[activeIndex]}
                   alt={`${ITEM.name} view ${activeIndex + 1}`}
                   fill
-                  className="object-cover"
+                  className="object-contain"
                   priority
                 />
               )}
