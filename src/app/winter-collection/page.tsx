@@ -28,7 +28,7 @@ const WINTER_CARDS: WinterCard[] = [
     id: 2,
     name: "Midnight Bloom Lehenga",
     image: "/images/dress/dress_2/1.jpg",
-    price: "Rs. 12,000",
+    price: "13,000",
     href: "/winter-collection/2",
   },
 ];

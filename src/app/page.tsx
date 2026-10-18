@@ -560,7 +560,7 @@ export default function Home() {
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Pearl Elegance</h3>
-                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Contact for Price</p>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">30,000</p>
                     </div>
                   </div>
                 </Link>

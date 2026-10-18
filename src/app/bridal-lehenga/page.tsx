@@ -28,7 +28,7 @@ const BRIDAL_CARDS: BridalCard[] = [
     id: 2,
     name: "Pearl Elegance",
     image: "/images/lehnga_2/1.jpg",
-    price: "Contact for Price",
+    price: "30,000",
     href: "/bridal-lehenga/2",
   },
 ];
