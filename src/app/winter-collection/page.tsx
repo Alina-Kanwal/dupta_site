@@ -21,14 +21,14 @@ const WINTER_CARDS: WinterCard[] = [
     id: 1,
     name: "Midnight Pearl",
     image: "/images/dress/dress_1/drss_one/one.jpg",
-    price: "Contact for Price",
+    price: "Rs. 7,000",
     href: "/winter-collection/1",
   },
   {
     id: 2,
     name: "Midnight Bloom Lehenga",
     image: "/images/dress/dress_2/1.jpg",
-    price: "Contact for Price",
+    price: "Rs. 12,000",
     href: "/winter-collection/2",
   },
 ];
@@ -40,7 +40,7 @@ export default function WinterCollectionPage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center mb-12 md:mb-16 text-center">
             <h1 className="font-heading text-4xl md:text-5xl text-[#7A1F2B] mb-4">
-              Winter Collection
+              Dress Collection
             </h1>
             <div className="h-px w-24 bg-[#C9A66B]" />
           </div>

@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { Star, Truck, Scissors, Sparkles, Medal } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { products } from "@/lib/products";
 
 
@@ -47,7 +47,7 @@ function HeroSlideshow() {
             Customize your Nikkah dupatta and make your wedding day special
           </p>
           <div className="pt-4">
-            <Link href="/">
+            <Link href="/shop">
               <Button size="lg" className="bg-[#C9A66B] text-[#2B2320] hover:bg-[#D9BC8F] font-body font-semibold rounded-xl px-10 h-14 text-lg transition-all duration-300 shadow-[0_4px_14px_rgba(201,166,107,0.4)] hover:shadow-[0_6px_20px_rgba(201,166,107,0.6)] hover:-translate-y-0.5">
                 Shop Now
               </Button>
@@ -56,6 +56,159 @@ function HeroSlideshow() {
         </div>
       </div>
     </section>
+  );
+}
+
+// ─── Testimonials Carousel ───────────────────────────────────────────────────
+function TestimonialsCarousel() {
+  const [currentIndex, setCurrentIndex] = useState(3);
+  const [isTransitioning, setIsTransitioning] = useState(false);
+  const [visibleCount, setVisibleCount] = useState(3);
+  const [isPaused, setIsPaused] = useState(false);
+  const touchStartX = useRef<number | null>(null);
+
+  useEffect(() => {
+    const updateVisibleCount = () => {
+      if (window.innerWidth < 768) {
+        setVisibleCount(1);
+      } else if (window.innerWidth < 1024) {
+        setVisibleCount(2);
+      } else {
+        setVisibleCount(3);
+      }
+    };
+    updateVisibleCount();
+    window.addEventListener("resize", updateVisibleCount);
+    return () => window.removeEventListener("resize", updateVisibleCount);
+  }, []);
+
+  const SLIDES = [
+    ...TESTIMONIALS,
+    ...TESTIMONIALS,
+    ...TESTIMONIALS,
+    ...TESTIMONIALS,
+  ];
+
+  useEffect(() => {
+    if (isPaused) return;
+
+    const timer = setInterval(() => {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev + 1);
+    }, 6000);
+
+    return () => clearInterval(timer);
+  }, [isPaused]);
+
+  const handleTransitionEnd = () => {
+    if (currentIndex >= 6 || currentIndex < 3) {
+      setIsTransitioning(false);
+      setCurrentIndex((prev) => 3 + (((prev % 3) + 3) % 3));
+    }
+  };
+
+  useEffect(() => {
+    if (currentIndex >= 6 || currentIndex < 3) {
+      const timeout = setTimeout(() => {
+        setIsTransitioning(false);
+        setCurrentIndex((prev) =>
+          prev >= 6 || prev < 3 ? 3 + (((prev % 3) + 3) % 3) : prev
+        );
+      }, 1700);
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex]);
+
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setIsPaused(true);
+    touchStartX.current = e.touches[0].clientX;
+  };
+
+  const handleTouchEnd = (e: React.TouchEvent) => {
+    setIsPaused(false);
+    if (touchStartX.current === null) return;
+    const diff = touchStartX.current - e.changedTouches[0].clientX;
+    if (diff > 50) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev + 1);
+    } else if (diff < -50) {
+      setIsTransitioning(true);
+      setCurrentIndex((prev) => prev - 1);
+    }
+    touchStartX.current = null;
+  };
+
+  const stepPercent = 100 / visibleCount;
+  const translatePercent = currentIndex * stepPercent;
+
+  return (
+    <div
+      className="relative w-full"
+      onMouseEnter={() => setIsPaused(true)}
+      onMouseLeave={() => setIsPaused(false)}
+      onTouchStart={handleTouchStart}
+      onTouchEnd={handleTouchEnd}
+    >
+      <div className="overflow-hidden -mx-3 md:-mx-4 py-4">
+        <div
+          className="flex items-stretch"
+          style={{
+            transform: `translateX(-${translatePercent}%)`,
+            transition: isTransitioning
+              ? "transform 1600ms cubic-bezier(0.25, 1, 0.5, 1)"
+              : "none",
+          }}
+          onTransitionEnd={handleTransitionEnd}
+        >
+          {SLIDES.map((testimonial, idx) => (
+            <div
+              key={`${testimonial.id}-${idx}`}
+              className="w-full md:w-1/2 lg:w-1/3 flex-shrink-0 px-3 md:px-4 flex flex-col"
+            >
+              <div className="bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-[#E8D9D3]/50 flex flex-col h-full">
+                <div className="flex gap-1.5 mb-6">
+                  {[...Array(testimonial.rating)].map((_, i) => (
+                    <Star key={i} className="w-4 h-4 fill-[#C9A66B] text-[#C9A66B]" />
+                  ))}
+                </div>
+                <p className="font-body text-[#2B2320]/80 leading-relaxed italic mb-10 flex-grow text-[15px]">
+                  "{testimonial.review}"
+                </p>
+                <div className="flex items-center gap-4 mt-auto pt-4 border-t border-[#E8D9D3]/40">
+                  <div className="w-12 h-12 rounded-full bg-[#7A1F2B] text-[#FAF6F1] flex items-center justify-center font-heading text-xl shadow-sm">
+                    {testimonial.name.charAt(0)}
+                  </div>
+                  <div className="text-left">
+                    <h4 className="font-heading text-lg text-[#2B2320] leading-none mb-1">{testimonial.name}</h4>
+                    <span className="font-body text-[11px] uppercase tracking-wider text-[#C9A66B] font-semibold">Verified Bride</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Subtle indicator dots */}
+      <div className="flex justify-center items-center gap-2 mt-8">
+        {TESTIMONIALS.map((_, i) => {
+          const active = (((currentIndex % 3) + 3) % 3) === i;
+          return (
+            <button
+              key={i}
+              onClick={() => {
+                setIsTransitioning(true);
+                setCurrentIndex(3 + i);
+              }}
+              aria-label={`Go to slide ${i + 1}`}
+              className={`h-2 rounded-full transition-all duration-300 ${
+                active ? "bg-[#C9A66B] w-6" : "bg-[#2B2320]/20 hover:bg-[#2B2320]/40 w-2"
+              }`}
+            />
+          );
+        })}
+      </div>
+    </div>
   );
 }
 
@@ -380,13 +533,13 @@ export default function Home() {
                     <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
                       <Image
                         src="/images/lehnga_1/1.jpg"
-                        alt="Bridal Lehenga 1"
+                        alt="Royal Contrast"
                         fill
                         className="object-cover"
                       />
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
-                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Bridal Lehenga 1</h3>
+                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Royal Contrast</h3>
                       <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 30,000</p>
                     </div>
                   </div>
@@ -400,13 +553,13 @@ export default function Home() {
                     <div className="relative aspect-[9/16] w-full overflow-hidden bg-[#E8C4C4]/20">
                       <Image
                         src="/images/lehnga_2/1.jpg"
-                        alt="Bridal Lehenga 2"
+                        alt="Pearl Elegance"
                         fill
                         className="object-cover"
                       />
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
-                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Bridal Lehenga 2</h3>
+                      <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Pearl Elegance</h3>
                       <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Contact for Price</p>
                     </div>
                   </div>
@@ -435,7 +588,7 @@ export default function Home() {
       <section className="-mt-12 pt-0 pb-20 bg-[#FAF6F1]">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center mb-8 text-center">
-            <h2 className="font-heading text-4xl md:text-5xl text-[#7A1F2B] mb-4">Winter Collection</h2>
+            <h2 className="font-heading text-4xl md:text-5xl text-[#7A1F2B] mb-4">Dress Collection</h2>
             <div className="h-px w-24 bg-[#C9A66B]" />
           </div>
 
@@ -468,7 +621,7 @@ export default function Home() {
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Midnight Pearl</h3>
-                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Contact for Price</p>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 7,000</p>
                     </div>
                   </div>
                 </Link>
@@ -488,7 +641,7 @@ export default function Home() {
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Midnight Bloom Lehenga</h3>
-                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Contact for Price</p>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 12,000</p>
                     </div>
                   </div>
                 </Link>
@@ -543,30 +696,8 @@ export default function Home() {
             <div className="h-px w-24 bg-[#C9A66B]" />
           </div>
 
-          {/* Grid layout serving as a simple scrollable row on mobile and grid on desktop */}
-          <div className="flex overflow-x-auto md:grid md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 pb-8 md:pb-0 snap-x snap-mandatory hide-scrollbar">
-            {TESTIMONIALS.map((testimonial) => (
-              <div key={testimonial.id} className="min-w-[85vw] sm:min-w-[300px] md:min-w-0 snap-center bg-white p-8 md:p-10 rounded-3xl shadow-sm border border-[#E8D9D3]/50 flex flex-col h-full">
-                <div className="flex gap-1.5 mb-6">
-                  {[...Array(testimonial.rating)].map((_, i) => (
-                    <Star key={i} className="w-4 h-4 fill-[#C9A66B] text-[#C9A66B]" />
-                  ))}
-                </div>
-                <p className="font-body text-[#2B2320]/80 leading-relaxed italic mb-10 flex-grow text-[15px]">
-                  "{testimonial.review}"
-                </p>
-                <div className="flex items-center gap-4 mt-auto pt-4 border-t border-[#E8D9D3]/40">
-                  <div className="w-12 h-12 rounded-full bg-[#7A1F2B] text-[#FAF6F1] flex items-center justify-center font-heading text-xl shadow-sm">
-                    {testimonial.name.charAt(0)}
-                  </div>
-                  <div className="text-left">
-                    <h4 className="font-heading text-lg text-[#2B2320] leading-none mb-1">{testimonial.name}</h4>
-                    <span className="font-body text-[11px] uppercase tracking-wider text-[#C9A66B] font-semibold">Verified Bride</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
+          {/* Smooth auto-moving horizontal carousel */}
+          <TestimonialsCarousel />
         </div>
       </section>
 

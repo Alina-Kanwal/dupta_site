@@ -19,14 +19,14 @@ interface BridalCard {
 const BRIDAL_CARDS: BridalCard[] = [
   {
     id: 1,
-    name: "Bridal Lehenga 1",
+    name: "Royal Contrast",
     image: "/images/lehnga_1/1.jpg",
     price: "Rs. 30,000",
     href: "/bridal-lehenga/1",
   },
   {
     id: 2,
-    name: "Bridal Lehenga 2",
+    name: "Pearl Elegance",
     image: "/images/lehnga_2/1.jpg",
     price: "Contact for Price",
     href: "/bridal-lehenga/2",

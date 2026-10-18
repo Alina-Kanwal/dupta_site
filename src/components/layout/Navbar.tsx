@@ -19,7 +19,7 @@ const NAV_LINKS = [
 ];
 
 const COLLECTIONS = [
-  { label: "Winter Collection", href: "/winter-collection" },
+  { label: "Dress Collection",  href: "/winter-collection" },
   { label: "Bridal Lehnga",     href: "/bridal-lehenga" },
   { label: "Nikkah Dupatta",    href: "/nikkah-dupatta" },
 ];

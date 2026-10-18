@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { ShoppingBag } from "lucide-react";
 
 const LEHENGA = {
-  name: "Bridal Lehenga 1",
+  name: "Royal Contrast",
   color: "Hot Pink & Olive Green",
   choli: "Chiffon with Pearl Lace and Stonework",
   lehenga: "Chiffon with Full Flare and Bottom Frill",
