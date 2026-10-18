@@ -11,6 +11,7 @@ import {
   SheetTrigger,
 } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/context/CartContext";
 
 const NAV_LINKS = [
   { label: "Home",     href: "/" },
@@ -25,7 +26,8 @@ const COLLECTIONS = [
 ];
 
 export default function Navbar() {
-  const [cartCount]                 = useState(0);
+  const { totalItems, isLoaded } = useCart();
+  const cartCount = isLoaded ? totalItems : 0;
   const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
   const [desktopCollectionsOpen, setDesktopCollectionsOpen] = useState(false);

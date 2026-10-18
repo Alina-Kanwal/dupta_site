@@ -6,6 +6,7 @@ import { Star, Truck, Scissors, Sparkles, Medal } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect, useRef } from "react";
 import { products } from "@/lib/products";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 
 const FEATURES = [
@@ -172,7 +173,7 @@ function TestimonialsCarousel() {
                   ))}
                 </div>
                 <p className="font-body text-[#2B2320]/80 leading-relaxed italic mb-10 flex-grow text-[15px]">
-                  "{testimonial.review}"
+                  &ldquo;{testimonial.review}&rdquo;
                 </p>
                 <div className="flex items-center gap-4 mt-auto pt-4 border-t border-[#E8D9D3]/40">
                   <div className="w-12 h-12 rounded-full bg-[#7A1F2B] text-[#FAF6F1] flex items-center justify-center font-heading text-xl shadow-sm">
@@ -263,6 +264,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -290,6 +298,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -317,6 +332,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -344,6 +366,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -371,6 +400,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -398,6 +434,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -425,6 +468,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -452,6 +502,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -479,6 +536,13 @@ export default function Home() {
                         <div className="p-4 md:p-5 flex flex-col gap-1.5">
                           <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">{product.name}</h3>
                           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. {product.price.toLocaleString()}</p>
+                          <AddToCartButton
+                            category="dupatta"
+                            id={product.id}
+                            name={product.name}
+                            price={product.price}
+                            image={product.images[0]}
+                          />
                         </div>
                       </div>
                     </Link>
@@ -541,6 +605,13 @@ export default function Home() {
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Royal Contrast</h3>
                       <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 30,000</p>
+                      <AddToCartButton
+                        category="bridal"
+                        id={1}
+                        name="Royal Contrast"
+                        price={30000}
+                        image="/images/lehnga_1/1.jpg"
+                      />
                     </div>
                   </div>
                 </Link>
@@ -561,6 +632,13 @@ export default function Home() {
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Pearl Elegance</h3>
                       <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">30,000</p>
+                      <AddToCartButton
+                        category="bridal"
+                        id={2}
+                        name="Pearl Elegance"
+                        price={30000}
+                        image="/images/lehnga_2/1.jpg"
+                      />
                     </div>
                   </div>
                 </Link>
@@ -622,6 +700,13 @@ export default function Home() {
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Midnight Pearl</h3>
                       <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">7,000</p>
+                      <AddToCartButton
+                        category="winter"
+                        id={1}
+                        name="Midnight Pearl"
+                        price={7000}
+                        image="/images/dress/dress_1/drss_one/one.jpg"
+                      />
                     </div>
                   </div>
                 </Link>
@@ -642,6 +727,13 @@ export default function Home() {
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Midnight Bloom Lehenga</h3>
                       <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">13,000</p>
+                      <AddToCartButton
+                        category="winter"
+                        id={2}
+                        name="Midnight Bloom Lehenga"
+                        price={13000}
+                        image="/images/dress/dress_2/1.jpg"
+                      />
                     </div>
                   </div>
                 </Link>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 export const metadata: Metadata = {
   title: "Shop — Wahi",
@@ -140,7 +141,16 @@ const CATEGORIES: CategorySection[] = [
   },
 ];
 
-function ProductCard({ product }: { product: ShopProduct }) {
+function getCartCategory(categoryId: string): string {
+  if (categoryId === "nikkah-dupatta") return "dupatta";
+  if (categoryId === "bridal-lehenga") return "bridal";
+  if (categoryId === "winter-collection") return "winter";
+  return categoryId;
+}
+
+function ProductCard({ product, categoryId }: { product: ShopProduct; categoryId: string }) {
+  const cartCategory = getCartCategory(categoryId);
+
   return (
     <Link href={product.href} className="group block">
       <div className="relative flex flex-col bg-white rounded-2xl overflow-hidden shadow-[0_2px_10px_rgba(43,35,32,0.05)] hover:shadow-[0_10px_30px_rgba(122,31,43,0.1)] transition-all duration-300">
@@ -159,6 +169,13 @@ function ProductCard({ product }: { product: ShopProduct }) {
           <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">
             {product.price}
           </p>
+          <AddToCartButton
+            category={cartCategory}
+            id={product.id}
+            name={product.name}
+            price={product.price}
+            image={product.image}
+          />
         </div>
       </div>
     </Link>
@@ -194,7 +211,7 @@ export default function ShopPage() {
 
                 <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6 lg:gap-8">
                   {category.products.map((product) => (
-                    <ProductCard key={product.id} product={product} />
+                    <ProductCard key={product.id} product={product} categoryId={category.id} />
                   ))}
                 </div>
               </div>

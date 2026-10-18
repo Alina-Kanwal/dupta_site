@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 export const metadata: Metadata = {
   title: "Bridal Lehenga Collection — Wahi",
@@ -64,6 +65,13 @@ export default function BridalLehengaCollectionPage() {
                     <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">
                       {card.price}
                     </p>
+                    <AddToCartButton
+                      category="bridal"
+                      id={card.id}
+                      name={card.name}
+                      price={card.price}
+                      image={card.image}
+                    />
                   </div>
                 </div>
               </Link>

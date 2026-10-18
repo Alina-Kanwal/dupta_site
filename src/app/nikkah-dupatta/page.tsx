@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import type { Metadata } from "next";
+import AddToCartButton from "@/components/cart/AddToCartButton";
 
 export const metadata: Metadata = {
   title: "Nikkah Dupatta Collection — Wahi",
@@ -113,6 +114,13 @@ export default function NikkahDupattaCollectionPage() {
                     <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">
                       Rs. {card.price.toLocaleString()}
                     </p>
+                    <AddToCartButton
+                      category="dupatta"
+                      id={card.id}
+                      name={card.name}
+                      price={card.price}
+                      image={card.image}
+                    />
                   </div>
                 </div>
               </Link>

@@ -3,6 +3,7 @@ import { Playfair_Display, Poppins } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
+import { CartProvider } from "@/context/CartContext";
 
 /* ─────────────────────────────────────────────────────────────
    Fonts — self-hosted via next/font (no external requests)
@@ -56,16 +57,18 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${playfairDisplay.variable} ${poppins.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col bg-background text-foreground">
-        {/* Global Navbar — sticky, appears on every page */}
-        <Navbar />
+        <CartProvider>
+          {/* Global Navbar — sticky, appears on every page */}
+          <Navbar />
 
-        {/* Page content */}
-        <main className="flex-1">
-          {children}
-        </main>
+          {/* Page content */}
+          <main className="flex-1">
+            {children}
+          </main>
 
-        {/* Global Footer — appears on every page */}
-        <Footer />
+          {/* Global Footer — appears on every page */}
+          <Footer />
+        </CartProvider>
       </body>
     </html>
   );
