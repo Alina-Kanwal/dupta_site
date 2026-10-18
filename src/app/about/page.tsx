@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 
 // About Us Page for Wahi - Nikkah Dupatta Brand
 export default function AboutPage() {
@@ -14,12 +15,13 @@ export default function AboutPage() {
             <div className="grid gap-8 md:grid-cols-2 md:items-center">
               {/* Image placeholder */}
               <div className="hidden md:block">
-                <div className="aspect-[4/3] w-full rounded-xl overflow-hidden bg-[#E8C4C4]/20">
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <div className="text-[#C9A66B]/50 text-lg">
-                      Our Story Image
-                    </div>
-                  </div>
+                <div className="relative aspect-[4/3] w-full rounded-xl overflow-hidden bg-[#E8C4C4]/20">
+                  <Image
+                    src="/images/our_story.jpg"
+                    alt="Our Story"
+                    fill
+                    className="object-cover"
+                  />
                 </div>
               </div>
 
