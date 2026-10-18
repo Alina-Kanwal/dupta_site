@@ -161,6 +161,12 @@ export default function WinterTwoDetailPage() {
               </div>
             )}
 
+            {/* Price */}
+            <div className="flex items-center justify-between px-1 pt-1">
+              <span className="font-body text-sm text-[#2B2320]/60">Price</span>
+              <span className="font-heading text-2xl text-[#C9A66B]">Rs. 13,000</span>
+            </div>
+
             {/* CTA */}
             <Button
               type="button"
@@ -168,7 +174,7 @@ export default function WinterTwoDetailPage() {
               className="w-full bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A] font-body font-semibold h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg"
             >
               <ShoppingBag className="mr-2 w-4 h-4" />
-              Enquire Now
+              Add to Cart
             </Button>
 
           </div>
