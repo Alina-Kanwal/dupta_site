@@ -4,7 +4,8 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Check } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 const LEHENGA = {
   name: "Royal Contrast",
@@ -35,6 +36,8 @@ const MEASUREMENTS = [
 ];
 
 export default function LehngaOneDetailPage() {
+  const { addItem } = useCart();
+  const [justAdded, setJustAdded] = useState(false);
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedSize, setSelectedSize] = useState<Size | null>(null);
   const [measurements, setMeasurements] = useState<Record<string, string>>({});
@@ -43,9 +46,28 @@ export default function LehngaOneDetailPage() {
   const isCustom = selectedSize === "Custom Size";
   const neckMissing = isCustom && !measurements["neck"]?.trim();
 
-  const handleEnquire = () => {
+  const handleAddToCart = () => {
     setAttempted(true);
+    if (!selectedSize) {
+      alert("Please select the size");
+      return;
+    }
     if (isCustom && neckMissing) return;
+
+    addItem({
+      category: "bridal",
+      id: 1,
+      name: `${LEHENGA.name} (${selectedSize})`,
+      price: 30000,
+      image: LEHENGA.images[0],
+      quantity: 1,
+      key: `bridal-1-${selectedSize}`,
+    });
+
+    setJustAdded(true);
+    setTimeout(() => {
+      setJustAdded(false);
+    }, 1200);
   };
 
   return (
@@ -101,6 +123,7 @@ export default function LehngaOneDetailPage() {
 
             {/* Product Info */}
             <div className="space-y-3 border-t border-[#E8D9D3] pt-5">
+              <InfoRow label="Price"    value="Rs. 30,000" />
               <InfoRow label="Color"    value={LEHENGA.color} />
               <InfoRow label="Choli"    value={LEHENGA.choli} />
               <InfoRow label="Lehenga" value={LEHENGA.lehenga} />
@@ -125,6 +148,9 @@ export default function LehngaOneDetailPage() {
                   </button>
                 ))}
               </div>
+              {attempted && !selectedSize && (
+                <p className="font-body text-xs text-red-500 font-medium">Please select the size</p>
+              )}
             </div>
 
             {/* Custom Size Measurements */}
@@ -167,11 +193,24 @@ export default function LehngaOneDetailPage() {
             {/* CTA */}
             <Button
               type="button"
-              onClick={handleEnquire}
-              className="w-full bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A] font-body font-semibold h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg"
+              onClick={handleAddToCart}
+              className={`w-full font-body font-semibold h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                justAdded
+                  ? "bg-[#C9A66B] text-[#2B2320]"
+                  : "bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A]"
+              }`}
             >
-              <ShoppingBag className="mr-2 w-4 h-4" />
-              Enquire Now
+              {justAdded ? (
+                <>
+                  <Check className="mr-2 w-4 h-4" />
+                  Added to Cart
+                </>
+              ) : (
+                <>
+                  <ShoppingBag className="mr-2 w-4 h-4" />
+                  Add to Cart
+                </>
+              )}
             </Button>
 
           </div>

@@ -46,8 +46,33 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
       if (saved) {
         const parsed = JSON.parse(saved);
         if (Array.isArray(parsed)) {
+          const deduplicated: CartItem[] = [];
+          parsed.forEach((raw, idx) => {
+            if (!raw || typeof raw !== "object") return;
+            const key = String(raw.key || `${raw.category || "item"}-${raw.id ?? idx}`);
+            const price =
+              typeof raw.price === "number" && !isNaN(raw.price)
+                ? raw.price
+                : Number(raw.price) || 0;
+            const quantity =
+              typeof raw.quantity === "number" && raw.quantity > 0
+                ? raw.quantity
+                : 1;
+
+            const existingIndex = deduplicated.findIndex((i) => i.key === key);
+            if (existingIndex > -1) {
+              deduplicated[existingIndex].quantity += quantity;
+            } else {
+              deduplicated.push({
+                ...raw,
+                key,
+                price,
+                quantity,
+              });
+            }
+          });
           // eslint-disable-next-line react-hooks/set-state-in-effect
-          setItems(parsed);
+          setItems(deduplicated);
         }
       }
     } catch (e) {
@@ -70,6 +95,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   const addItem = (input: AddItemInput) => {
     const key = input.key || `${input.category}-${input.id}`;
     const qtyToAdd = input.quantity && input.quantity > 0 ? input.quantity : 1;
+    const numericPrice =
+      typeof input.price === "number" && !isNaN(input.price)
+        ? input.price
+        : Number(input.price) || 0;
 
     setItems((prevItems) => {
       const existingIndex = prevItems.findIndex((item) => item.key === key);
@@ -87,7 +116,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           key,
           id: input.id,
           name: input.name,
-          price: input.price,
+          price: numericPrice,
           image: input.image,
           quantity: qtyToAdd,
           category: input.category,
@@ -113,7 +142,10 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
   };
 
   const totalItems = items.reduce((sum, item) => sum + item.quantity, 0);
-  const totalPrice = items.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const totalPrice = items.reduce(
+    (sum, item) => sum + (Number(item.price) || 0) * item.quantity,
+    0
+  );
 
   return (
     <CartContext.Provider

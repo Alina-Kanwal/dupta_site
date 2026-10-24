@@ -63,8 +63,8 @@ export default function CartPage() {
 
               {/* Items List */}
               <div className="divide-y divide-[#E8D9D3]/60">
-                {items.map((item) => (
-                  <div key={item.key} className="py-4 sm:py-6 flex gap-4 items-center">
+                {items.map((item, index) => (
+                  <div key={item.key || `cart-item-${item.id ?? index}-${index}`} className="py-4 sm:py-6 flex gap-4 items-center">
                     {/* Thumbnail */}
                     <div className="relative w-16 h-20 sm:w-20 sm:h-24 rounded-lg overflow-hidden bg-[#E8C4C4]/20 flex-shrink-0">
                       <Image
@@ -81,10 +81,10 @@ export default function CartPage() {
                         {item.name}
                       </h3>
                       <p className="font-body text-xs text-[#2B2320]/60 mt-0.5">
-                        Rs. {item.price.toLocaleString()} each
+                        Rs. {(Number(item.price) || 0).toLocaleString()} each
                       </p>
                       <p className="font-body text-sm font-semibold text-[#C9A66B] mt-1 sm:hidden">
-                        Total: Rs. {(item.price * item.quantity).toLocaleString()}
+                        Total: Rs. {((Number(item.price) || 0) * item.quantity).toLocaleString()}
                       </p>
                     </div>
 
@@ -114,7 +114,7 @@ export default function CartPage() {
                     {/* Line total for desktop */}
                     <div className="hidden sm:block text-right min-w-[100px]">
                       <span className="font-body text-base font-semibold text-[#7A1F2B]">
-                        Rs. {(item.price * item.quantity).toLocaleString()}
+                        Rs. {((Number(item.price) || 0) * item.quantity).toLocaleString()}
                       </span>
                     </div>
 
@@ -146,7 +146,7 @@ export default function CartPage() {
                     Total Price:
                   </span>
                   <span className="font-heading text-2xl text-[#7A1F2B]">
-                    Rs. {totalPrice.toLocaleString()}
+                    Rs. {(Number(totalPrice) || 0).toLocaleString()}
                   </span>
                 </div>
               </div>

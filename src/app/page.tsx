@@ -48,7 +48,13 @@ function HeroSlideshow() {
             Customize your Nikkah dupatta and make your wedding day special
           </p>
           <div className="pt-4">
-            <Link href="/shop">
+            <Link
+              href="#products"
+              onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("products")?.scrollIntoView({ behavior: "smooth" });
+              }}
+            >
               <Button size="lg" className="bg-[#C9A66B] text-[#2B2320] hover:bg-[#D9BC8F] font-body font-semibold rounded-xl px-10 h-14 text-lg transition-all duration-300 shadow-[0_4px_14px_rgba(201,166,107,0.4)] hover:shadow-[0_6px_20px_rgba(201,166,107,0.6)] hover:-translate-y-0.5">
                 Shop Now
               </Button>
@@ -221,7 +227,7 @@ export default function Home() {
 
 
       {/* 2. Featured/New Arrivals Section */}
-      <section className="py-20 md:py-32 bg-[#FAF6F1]">
+      <section id="products" className="py-20 md:py-32 bg-[#FAF6F1] scroll-mt-20">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex flex-col items-center mb-12 md:mb-16 text-center">
             <h2 className="font-heading text-4xl md:text-5xl text-[#7A1F2B] mb-4">New Arrivals</h2>
@@ -631,7 +637,7 @@ export default function Home() {
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Pearl Elegance</h3>
-                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">30,000</p>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 30,000</p>
                       <AddToCartButton
                         category="bridal"
                         id={2}
@@ -699,7 +705,7 @@ export default function Home() {
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Midnight Pearl</h3>
-                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">7,000</p>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 7,000</p>
                       <AddToCartButton
                         category="winter"
                         id={1}
@@ -726,7 +732,7 @@ export default function Home() {
                     </div>
                     <div className="p-4 md:p-5 flex flex-col gap-1.5">
                       <h3 className="font-heading text-lg md:text-xl text-[#2B2320] group-hover:text-[#7A1F2B] transition-colors line-clamp-1">Midnight Bloom Lehenga</h3>
-                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">13,000</p>
+                      <p className="font-body text-sm md:text-base text-[#C9A66B] font-semibold">Rs. 13,000</p>
                       <AddToCartButton
                         category="winter"
                         id={2}

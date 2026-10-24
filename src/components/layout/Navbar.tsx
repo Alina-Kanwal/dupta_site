@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import Link from "next/link";
-import { ShoppingBag, Search, Menu, ChevronDown, ChevronRight } from "lucide-react";
+import { ShoppingBag, Search, Menu, ChevronRight } from "lucide-react";
 import {
   Sheet,
   SheetContent,
@@ -19,19 +19,11 @@ const NAV_LINKS = [
   { label: "Contact",  href: "/contact" },
 ];
 
-const COLLECTIONS = [
-  { label: "Dress Collection",  href: "/winter-collection" },
-  { label: "Bridal Lehnga",     href: "/bridal-lehenga" },
-  { label: "Nikkah Dupatta",    href: "/nikkah-dupatta" },
-];
-
 export default function Navbar() {
   const { totalItems, isLoaded } = useCart();
   const cartCount = isLoaded ? totalItems : 0;
   const [scrolled, setScrolled]     = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [desktopCollectionsOpen, setDesktopCollectionsOpen] = useState(false);
-  const [mobileCollectionsOpen, setMobileCollectionsOpen] = useState(true);
 
   /* Add shadow on scroll */
   useEffect(() => {
@@ -39,24 +31,6 @@ export default function Navbar() {
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
-
-  /* Handle clicks outside desktop dropdown */
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (desktopCollectionsOpen) {
-        const target = event.target as HTMLElement;
-        if (
-          target &&
-          !target.closest('#collections-dropdown-btn') &&
-          !target.closest('#collections-dropdown-panel')
-        ) {
-          setDesktopCollectionsOpen(false);
-        }
-      }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
-  }, [desktopCollectionsOpen]);
 
   /* Close mobile drawer on desktop resize */
   useEffect(() => {
@@ -73,7 +47,6 @@ export default function Navbar() {
   useEffect(() => {
     const handleEscape = (event: KeyboardEvent) => {
       if (event.key === "Escape") {
-        setDesktopCollectionsOpen(false);
         setMobileOpen(false);
       }
     };
@@ -128,51 +101,6 @@ export default function Navbar() {
                 {label}
               </Link>
             ))}
-            {/* Collections Dropdown */}
-            <div className="relative">
-              <button
-                id="collections-dropdown-btn"
-                type="button"
-                onClick={(e: React.MouseEvent<HTMLButtonElement>) => {
-                  e.stopPropagation();
-                  setDesktopCollectionsOpen((prev) => !prev);
-                }}
-                className="relative flex items-center px-4 py-2 font-body text-sm font-medium text-[#2B2320]
-                           hover:text-[#7A1F2B] transition-colors duration-200
-                           after:absolute after:bottom-0 after:left-4 after:right-4 after:h-px
-                           after:bg-[#C9A66B] after:scale-x-0 hover:after:scale-x-100
-                           after:transition-transform after:duration-300 after:origin-left"
-                aria-label="Collections dropdown"
-                aria-haspopup="true"
-                aria-expanded={desktopCollectionsOpen}
-              >
-                Collections
-                <ChevronDown
-                  className={cn(
-                    "ml-1.5 h-3.5 w-3.5 transition-transform duration-200",
-                    desktopCollectionsOpen ? "rotate-180" : "rotate-0"
-                  )}
-                />
-              </button>
-              <div
-                id="collections-dropdown-panel"
-                className={cn(
-                  "absolute left-0 mt-2 w-48 bg-white rounded-md shadow-lg border border-[#E8D9D3] z-20 py-1 transition-all duration-150",
-                  desktopCollectionsOpen ? "block" : "hidden"
-                )}
-              >
-                {COLLECTIONS.map(({ label, href }) => (
-                  <Link
-                    key={href}
-                    href={href}
-                    onClick={() => setDesktopCollectionsOpen(false)}
-                    className="block px-4 py-2 text-sm text-[#2B2320] hover:bg-[#E8C4C4]/50 hover:text-[#7A1F2B] transition-colors"
-                  >
-                    {label}
-                  </Link>
-                ))}
-              </div>
-            </div>
           </nav>
 
           {/* ── Right-side Icons ──────────────────────────────── */}
@@ -258,57 +186,6 @@ export default function Navbar() {
                         </Link>
                       ))}
 
-                      {/* Mobile Collections Section */}
-                      <div className="mt-2 pt-3 border-t border-[#E8D9D3]">
-                        <button
-                          type="button"
-                          onClick={() => setMobileCollectionsOpen((prev) => !prev)}
-                          className="w-full flex items-center justify-between px-3.5 py-2.5 rounded-xl font-body
-                                     text-[15px] font-semibold text-[#7A1F2B] hover:bg-[#E8C4C4]/25
-                                     active:bg-[#E8C4C4]/40 transition-all duration-200"
-                          aria-expanded={mobileCollectionsOpen}
-                          aria-controls="mobile-collections-list"
-                        >
-                          <span className="flex items-center gap-2">
-                            <span>Collections</span>
-                            <span className="text-[10px] font-medium font-body uppercase tracking-wider px-2 py-0.5 rounded-full bg-[#C9A66B]/20 text-[#7A1F2B]">
-                              {COLLECTIONS.length}
-                            </span>
-                          </span>
-                          <ChevronDown
-                            className={cn(
-                              "w-4 h-4 text-[#7A1F2B] transition-transform duration-200",
-                              mobileCollectionsOpen ? "rotate-180" : "rotate-0"
-                            )}
-                          />
-                        </button>
-
-                        {mobileCollectionsOpen && (
-                          <div
-                            id="mobile-collections-list"
-                            className="mt-1 pl-2 pr-1 space-y-1 border-l-2 border-[#C9A66B]/30 ml-3.5 py-1"
-                          >
-                            {COLLECTIONS.map(({ label, href }) => (
-                              <Link
-                                key={href}
-                                href={href}
-                                onClick={() => setMobileOpen(false)}
-                                className="flex items-center justify-between w-full px-3 py-2.5 rounded-lg font-body
-                                           text-sm font-medium text-[#2B2320] hover:text-[#7A1F2B]
-                                           hover:bg-[#E8C4C4]/40 active:bg-[#E8C4C4]/60 transition-all duration-200 group"
-                              >
-                                <span className="flex items-center gap-2.5">
-                                  <span className="w-1.5 h-1.5 rounded-full bg-[#C9A66B] flex-shrink-0" />
-                                  <span className="group-hover:translate-x-0.5 transition-transform duration-150">
-                                    {label}
-                                  </span>
-                                </span>
-                                <ChevronRight className="w-3.5 h-3.5 text-[#C9A66B] opacity-70 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all duration-150 flex-shrink-0" />
-                              </Link>
-                            ))}
-                          </div>
-                        )}
-                      </div>
                     </nav>
 
                     {/* Divider + tagline footer */}
