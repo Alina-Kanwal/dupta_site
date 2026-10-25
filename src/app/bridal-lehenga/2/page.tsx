@@ -80,20 +80,20 @@ export default function LehngaTwoDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6F1] py-10 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF6F1] py-8 sm:py-10 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
 
         {/* Breadcrumb */}
         <nav className="mb-6 text-sm">
           <Link href="/" className="text-[#2B2320]/60 hover:text-[#7A1F2B]">Home</Link>
           <span className="mx-2 text-[#2B2320]/40">/</span>
-          <span className="text-[#2B2320] font-medium">{LEHENGA.name}</span>
+          <span className="text-[#2B2320] font-medium break-words">{LEHENGA.name}</span>
         </nav>
 
-        <div className="flex flex-col lg:flex-row gap-10 lg:gap-16">
+        <div className="flex flex-col lg:flex-row gap-8 lg:gap-16">
 
           {/* ── Gallery ── */}
-          <div className="w-full lg:w-1/2 lg:sticky lg:top-24 self-start flex flex-col gap-4">
+          <div className="w-full lg:w-1/2 lg:sticky lg:top-24 self-start flex flex-col gap-4 min-w-0">
             {/* Main Image */}
             <div className="relative w-full aspect-[3/4] rounded-2xl overflow-hidden bg-[#E8C4C4]/20 shadow-sm">
               {LEHENGA.images[activeIndex] && (
@@ -107,7 +107,7 @@ export default function LehngaTwoDetailPage() {
               )}
             </div>
             {/* Thumbnail Row */}
-            <div className="flex gap-2 overflow-x-auto pb-1 hide-scrollbar">
+            <div className="flex gap-2 overflow-x-auto pb-1 max-w-full hide-scrollbar">
               {LEHENGA.images.map((src, i) => (
                 <button
                   key={i}
@@ -125,10 +125,10 @@ export default function LehngaTwoDetailPage() {
           </div>
 
           {/* ── Details ── */}
-          <div className="w-full lg:w-1/2 space-y-7">
+          <div className="w-full lg:w-1/2 space-y-6 sm:space-y-7 min-w-0">
 
             {/* Title */}
-            <h1 className="font-heading text-3xl md:text-4xl text-[#7A1F2B] leading-tight">{LEHENGA.name}</h1>
+            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl text-[#7A1F2B] leading-tight break-words">{LEHENGA.name}</h1>
 
             {/* Product Info */}
             <div className="space-y-3 border-t border-[#E8D9D3] pt-5">
@@ -148,7 +148,7 @@ export default function LehngaTwoDetailPage() {
                   <button
                     key={size}
                     onClick={() => { setSelectedSize(size); setAttempted(false); }}
-                    className={`px-5 py-2.5 rounded-xl border-2 font-body text-sm font-medium transition-all duration-200 ${
+                    className={`min-h-[44px] px-4 sm:px-5 py-2.5 rounded-xl border-2 font-body text-sm font-medium flex items-center justify-center transition-all duration-200 ${
                       selectedSize === size
                         ? "border-[#7A1F2B] bg-[#7A1F2B] text-white"
                         : "border-[#E8D9D3] bg-white text-[#2B2320] hover:border-[#C9A66B]"
@@ -165,7 +165,7 @@ export default function LehngaTwoDetailPage() {
 
             {/* Custom Size Measurements */}
             {isCustom && (
-              <div className="rounded-2xl border border-[#E8D9D3] bg-white p-5 space-y-4">
+              <div className="rounded-2xl border border-[#E8D9D3] bg-white p-4 sm:p-5 space-y-4">
                 <p className="font-body text-sm font-semibold text-[#2B2320]">Enter Your Measurements <span className="text-[#C9A66B] font-normal">(inches)</span></p>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                   {MEASUREMENTS.map((m) => (
@@ -179,7 +179,7 @@ export default function LehngaTwoDetailPage() {
                         value={measurements[m.id] ?? ""}
                         onChange={(e) => setMeasurements((prev) => ({ ...prev, [m.id]: e.target.value }))}
                         placeholder={m.placeholder}
-                        className={`w-full px-3 py-2.5 rounded-xl border font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30 focus:outline-none transition-all duration-200 ${
+                        className={`w-full min-h-[44px] px-3 py-2.5 rounded-xl border font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30 focus:outline-none transition-all duration-200 ${
                           m.required && attempted && !measurements[m.id]?.trim()
                             ? "border-red-400 focus:border-red-400 focus:ring-1 focus:ring-red-300"
                             : "border-[#E8D9D3] focus:border-[#7A1F2B] focus:ring-1 focus:ring-[#7A1F2B]/20"
@@ -196,7 +196,7 @@ export default function LehngaTwoDetailPage() {
 
             {/* Price */}
             <div className="flex items-center justify-between px-1 pt-1">
-              <span className="font-body text-sm text-[#2B2320]/60">Price</span>
+              <span className="font-body text-sm text-[#2B2320]/60 shrink-0">Price</span>
               <span className="font-heading text-2xl text-[#C9A66B]">Rs. 30,000</span>
             </div>
 
@@ -204,7 +204,7 @@ export default function LehngaTwoDetailPage() {
             <Button
               type="button"
               onClick={handleAddToCart}
-              className={`w-full font-body font-semibold h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+              className={`w-full font-body font-semibold min-h-[48px] h-auto py-3 px-4 sm:px-6 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg text-sm sm:text-base whitespace-normal text-center leading-snug ${
                 justAdded
                   ? "bg-[#C9A66B] text-[#2B2320]"
                   : "bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A]"
@@ -212,13 +212,13 @@ export default function LehngaTwoDetailPage() {
             >
               {justAdded ? (
                 <>
-                  <Check className="mr-2 w-4 h-4" />
-                  Added to Cart
+                  <Check className="mr-2 w-4 h-4 shrink-0 inline-block" />
+                  <span>Added to Cart</span>
                 </>
               ) : (
                 <>
-                  <ShoppingBag className="mr-2 w-4 h-4" />
-                  Add to Cart
+                  <ShoppingBag className="mr-2 w-4 h-4 shrink-0 inline-block" />
+                  <span>Add to Cart</span>
                 </>
               )}
             </Button>
@@ -234,7 +234,7 @@ function InfoRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex flex-row items-start gap-3">
       <span className="font-body text-sm font-medium text-[#2B2320]/60 w-20 shrink-0">{label}</span>
-      <span className="font-body text-sm text-[#2B2320]">{value}</span>
+      <span className="font-body text-sm text-[#2B2320] flex-1 min-w-0 break-words">{value}</span>
     </div>
   );
 }

@@ -100,22 +100,22 @@ export default function NewCardDetailPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#FAF6F1] py-12 px-4 sm:px-6 lg:px-8">
+    <div className="min-h-screen bg-[#FAF6F1] py-8 sm:py-12 px-4 sm:px-6 lg:px-8">
       <div className="max-w-7xl mx-auto">
         <nav className="mb-6">
           <Link href="/" className="text-sm text-[#2B2320]/70 hover:text-[#7A1F2B]">
             Home
           </Link>
           <span className="mx-2 text-xs text-[#2B2320]/50">/</span>
-          <span className="text-sm font-medium text-[#2B2320]">Fancy Bunches Patch Work Dupatta</span>
+          <span className="text-sm font-medium text-[#2B2320] break-words">Fancy Bunches Patch Work Dupatta</span>
         </nav>
 
         <div className="flex flex-col md:flex-row md:items-start gap-8 md:gap-12">
-          {/* Gallery — thumbnails left, main image right (seri.pk style) */}
-          <div className="w-full md:w-1/2 md:sticky md:top-24 shrink-0 flex flex-row gap-3">
-            {/* Vertical thumbnail strip — same 4:5 ratio as main, fixed width */}
+          {/* Gallery — thumbnails left on desktop, thumbnails bottom on mobile */}
+          <div className="w-full md:w-1/2 md:sticky md:top-24 shrink-0 flex flex-col-reverse md:flex-row gap-3 min-w-0">
+            {/* Thumbnail strip — horizontal on mobile, vertical on desktop */}
             {newCardProduct.images.length > 1 && (
-              <div className="flex flex-col gap-2 flex-shrink-0">
+              <div className="flex flex-row md:flex-col gap-2 overflow-x-auto md:overflow-x-visible pb-1 md:pb-0 max-w-full hide-scrollbar flex-shrink-0">
                 {newCardProduct.images.map((_, index) => {
                   const isActive = activeImageIndex === index;
                   return (
@@ -125,19 +125,27 @@ export default function NewCardDetailPage() {
                       onClick={() => setActiveImageIndex(index)}
                       aria-label={`View image ${index + 1}`}
                       aria-pressed={isActive}
-                      className={`w-16 sm:w-20 aspect-[4/5] flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-[#E8C4C4]/20 ${
+                      className={`relative w-16 sm:w-20 aspect-[4/5] flex-shrink-0 rounded-lg overflow-hidden border-2 transition-all duration-200 bg-[#E8C4C4]/20 ${
                         isActive
                           ? "border-[#7A1F2B] shadow-[0_0_0_2px_rgba(122,31,43,0.2)]"
                           : "border-[#E8D9D3] hover:border-[#C9A66B]"
                       }`}
-                    />
+                    >
+                      <Image
+                        src={newCardProduct.images[index]}
+                        alt={`${newCardProduct.name} thumbnail ${index + 1}`}
+                        fill
+                        className="object-cover"
+                        sizes="80px"
+                      />
+                    </button>
                   );
                 })}
               </div>
             )}
 
             {/* Main image display — 4:5 portrait, full image visible */}
-            <div className="relative flex-1 aspect-[4/5] overflow-hidden rounded-2xl bg-[#E8C4C4]/20 shadow-sm">
+            <div className="relative w-full md:flex-1 aspect-[4/5] overflow-hidden rounded-2xl bg-[#E8C4C4]/20 shadow-sm">
               {newCardProduct.images[activeImageIndex] && (
                 <Image
                   src={newCardProduct.images[activeImageIndex]}
@@ -151,8 +159,8 @@ export default function NewCardDetailPage() {
           </div>
 
           {/* Product Details */}
-          <div className="w-full md:w-1/2 space-y-6">
-            <h1 className="font-heading text-3xl md:text-4xl text-[#7A1F2B]">
+          <div className="w-full md:w-1/2 space-y-6 min-w-0">
+            <h1 className="font-heading text-2xl sm:text-3xl md:text-4xl text-[#7A1F2B] break-words">
               {newCardProduct.name}
             </h1>
 
@@ -165,11 +173,11 @@ export default function NewCardDetailPage() {
               <DetailRow label="Sitara Work"   value={newCardProduct.sitaraWork} />
 
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-2">
-                <span className="font-body text-sm font-medium text-[#2B2320]/70">Color</span>
+                <span className="font-body text-sm font-medium text-[#2B2320]/70 shrink-0">Color</span>
                 <select
                   value={selectedColor}
                   onChange={(e) => setSelectedColor(e.target.value)}
-                  className="w-full md:w-48 px-4 py-2.5 rounded-xl border border-[#E8D9D3] bg-white font-body text-sm text-[#2B2320] focus:outline-none focus:border-[#C9A66B] focus:ring-1 focus:ring-[#C9A66B] transition-all"
+                  className="w-full md:w-48 min-h-[44px] px-4 py-2.5 rounded-xl border border-[#E8D9D3] bg-white font-body text-sm text-[#2B2320] focus:outline-none focus:border-[#C9A66B] focus:ring-1 focus:ring-[#C9A66B] transition-all"
                 >
                   {COLOR_OPTIONS.map((color) => (
                     <option key={color} value={color}>{color}</option>
@@ -178,7 +186,7 @@ export default function NewCardDetailPage() {
               </div>
 
               <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-2 pt-2 border-t border-[#E8D9D3]">
-                <span className="font-body text-sm font-medium text-[#2B2320]/70">Base Price</span>
+                <span className="font-body text-sm font-medium text-[#2B2320]/70 shrink-0">Base Price</span>
                 <span className="font-body text-base text-[#2B2320]/70">
                   Rs. {newCardProduct.price.toLocaleString()}
                 </span>
@@ -186,10 +194,10 @@ export default function NewCardDetailPage() {
             </div>
 
             {/* ── Add Name Section ─────────────────────────────── */}
-            <div className="rounded-2xl border border-[#E8D9D3] bg-white p-5 space-y-4">
+            <div className="rounded-2xl border border-[#E8D9D3] bg-white p-4 sm:p-5 space-y-4">
 
               {/* Checkbox row */}
-              <label className="flex items-center gap-3 cursor-pointer group">
+              <label className="flex items-center gap-3 cursor-pointer group min-h-[44px] py-1">
                 <span className="relative flex-shrink-0">
                   <input
                     id="add-name-checkbox"
@@ -228,10 +236,10 @@ export default function NewCardDetailPage() {
                       return (
                         <label
                           key={opt.id}
-                          className={`flex-1 flex items-center gap-3 cursor-pointer rounded-xl border-2 px-4 py-3.5 transition-all duration-200 ${
+                          className={`flex-1 min-h-[44px] flex items-center gap-3 cursor-pointer rounded-xl border-2 px-4 py-3.5 transition-all duration-200 ${
                             isSelected
                               ? "border-[#7A1F2B] bg-[#7A1F2B]/5"
-                              : "border-[#E8D9D3] bg-[#FAF6F1] hover-border-[#C9A66B]"
+                              : "border-[#E8D9D3] bg-[#FAF6F1] hover:border-[#C9A66B]"
                           }`}
                         >
                           {/* Custom radio */}
@@ -285,7 +293,7 @@ export default function NewCardDetailPage() {
                         }}
                         placeholder="e.g. Fatima, Ayesha…"
                         maxLength={40}
-                        className={`w-full px-4 py-3 rounded-xl border ${nameError ? "border-red-500" : "border-[#E8D9D3]"} bg-[#FAF6F1] font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30
+                        className={`w-full min-h-[44px] px-4 py-3 rounded-xl border ${nameError ? "border-red-500" : "border-[#E8D9D3]"} bg-[#FAF6F1] font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30
                                    focus:outline-none focus:border-[#7A1F2B] focus:ring-2 focus:ring-[#7A1F2B]/20
                                    transition-all duration-200`}
                       />
@@ -302,19 +310,19 @@ export default function NewCardDetailPage() {
             {/* Total price + Add to Cart */}
             <div className="space-y-3 pt-2">
               {/* Dynamic total */}
-              <div className="flex items-center justify-between px-1">
-                <span className="font-body text-sm font-medium text-[#2B2320]/70">Total</span>
-                <div className="flex items-baseline gap-2">
+              <div className="flex items-center justify-between gap-2 px-1">
+                <span className="font-body text-sm font-medium text-[#2B2320]/70 shrink-0">Total</span>
+                <div className="flex items-baseline gap-1.5 sm:gap-2 flex-wrap justify-end">
                   {nameCharge > 0 && (
-                    <span className="font-body text-xs text-[#2B2320]/40 line-through">
+                    <span className="font-body text-xs text-[#2B2320]/40 line-through shrink-0">
                       Rs. {newCardProduct.price.toLocaleString()}
                     </span>
                   )}
-                  <span className="font-heading text-2xl text-[#C9A66B] font-semibold tabular-nums">
+                  <span className="font-heading text-xl sm:text-2xl text-[#C9A66B] font-semibold tabular-nums shrink-0">
                     Rs. {totalPrice.toLocaleString()}
                   </span>
                   {nameCharge > 0 && (
-                    <span className="font-body text-xs text-[#7A1F2B] bg-[#7A1F2B]/10 rounded-full px-2 py-0.5 font-medium">
+                    <span className="font-body text-xs text-[#7A1F2B] bg-[#7A1F2B]/10 rounded-full px-2 py-0.5 font-medium shrink-0">
                       +Rs. {nameCharge.toLocaleString()} name
                     </span>
                   )}
@@ -324,7 +332,7 @@ export default function NewCardDetailPage() {
               <Button
                 type="button"
                 onClick={handleAddToCart}
-                className={`w-full font-body font-semibold px-6 py-3 h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                className={`w-full font-body font-semibold px-4 sm:px-6 py-3 min-h-[48px] h-auto rounded-xl shadow-md transition-all duration-200 hover:shadow-lg text-sm sm:text-base whitespace-normal text-center leading-snug ${
                   justAdded
                     ? "bg-[#C9A66B] text-[#2B2320]"
                     : "bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A]"
@@ -332,13 +340,13 @@ export default function NewCardDetailPage() {
               >
                 {justAdded ? (
                   <>
-                    <Check className="mr-2 w-4 h-4" />
-                    Added to Cart — Rs. {totalPrice.toLocaleString()}
+                    <Check className="mr-2 w-4 h-4 shrink-0 inline-block" />
+                    <span>Added to Cart — Rs. {totalPrice.toLocaleString()}</span>
                   </>
                 ) : (
                   <>
-                    <ShoppingBag className="mr-2 w-4 h-4" />
-                    Add to Cart — Rs. {totalPrice.toLocaleString()}
+                    <ShoppingBag className="mr-2 w-4 h-4 shrink-0 inline-block" />
+                    <span>Add to Cart — Rs. {totalPrice.toLocaleString()}</span>
                   </>
                 )}
               </Button>
@@ -352,9 +360,9 @@ export default function NewCardDetailPage() {
 
 function DetailRow({ label, value }: { label: string; value: string }) {
   return (
-    <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-1 md:gap-4">
-      <span className="font-body text-sm font-medium text-[#2B2320]/70">{label}</span>
-      <span className="font-body text-sm text-[#2B2320]">{value}</span>
+    <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-1 sm:gap-4">
+      <span className="font-body text-sm font-medium text-[#2B2320]/70 shrink-0">{label}</span>
+      <span className="font-body text-sm text-[#2B2320] break-words sm:text-right">{value}</span>
     </div>
   );
 }
