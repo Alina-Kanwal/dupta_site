@@ -80,7 +80,29 @@ export default function CartPage() {
                       <h3 className="font-heading text-base sm:text-lg text-[#2B2320] line-clamp-1">
                         {item.name}
                       </h3>
-                      <p className="font-body text-xs text-[#2B2320]/60 mt-0.5">
+                      {item.customization && (
+                        <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 font-body text-xs text-[#2B2320]/75">
+                          {item.customization.size && (
+                            <span>
+                              Size: <strong className="font-medium text-[#2B2320]">{item.customization.size}</strong>
+                            </span>
+                          )}
+                          {item.customization.color && (
+                            <span>
+                              Color: <strong className="font-medium text-[#2B2320]">{item.customization.color}</strong>
+                            </span>
+                          )}
+                          {item.customization.nameOption && (
+                            <span>
+                              {item.customization.nameOption}
+                              {item.customization.customName ? (
+                                <>: <strong className="font-medium text-[#2B2320]">&ldquo;{item.customization.customName}&rdquo;</strong></>
+                              ) : ""}
+                            </span>
+                          )}
+                        </div>
+                      )}
+                      <p className="font-body text-xs text-[#2B2320]/60 mt-1">
                         Rs. {(Number(item.price) || 0).toLocaleString()} each
                       </p>
                       <p className="font-body text-sm font-semibold text-[#C9A66B] mt-1 sm:hidden">

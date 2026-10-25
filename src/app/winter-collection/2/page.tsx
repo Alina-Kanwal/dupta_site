@@ -56,14 +56,19 @@ export default function WinterTwoDetailPage() {
     }
     if (isCustom && neckMissing) return;
 
+    const safeSize = selectedSize.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+
     addItem({
       category: "winter",
       id: 2,
-      name: `${ITEM.name} (${selectedSize})`,
+      name: ITEM.name,
       price: 13000,
       image: ITEM.images[0],
       quantity: 1,
-      key: `winter-2-${selectedSize}`,
+      key: `winter-2-${safeSize}`,
+      customization: {
+        size: selectedSize,
+      },
     });
 
     setJustAdded(true);

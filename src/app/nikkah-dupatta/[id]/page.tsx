@@ -7,7 +7,8 @@ import Image from "next/image";
 import { Product } from "@/lib/products";
 import { products } from "@/lib/products";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Check } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 
 const NAME_OPTIONS = [
@@ -21,6 +22,7 @@ export default function ProductDetailPage() {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
   const productId = parseInt(id);
+  const { addItem } = useCart();
 
   const [product,          setProduct]         = useState<Product | null>(null);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -28,6 +30,8 @@ export default function ProductDetailPage() {
   const [addName,         setAddName]         = useState(false);
   const [nameOption,      setNameOption]       = useState<NameOptionId>(null);
   const [customName,      setCustomName]       = useState("");
+  const [justAdded,       setJustAdded]        = useState(false);
+  const [nameError,       setNameError]        = useState("");
 
   useEffect(() => {
     const productData = products.find((p) => p.id === productId);
@@ -69,7 +73,60 @@ export default function ProductDetailPage() {
     if (!checked) {
       setNameOption(null);
       setCustomName("");
+      setNameError("");
     }
+  };
+
+  const handleAddToCart = () => {
+    if (!product) return;
+
+    const hasNameOption = Boolean(addName && nameOption);
+    if (hasNameOption && !customName.trim()) {
+      setNameError("Please enter the custom name");
+      return;
+    }
+    setNameError("");
+
+    const isColorCustomized = Boolean(
+      selectedColor && selectedColor.trim().toLowerCase() !== product.color.trim().toLowerCase()
+    );
+
+    const parts = [`dupatta-${product.id}`];
+    if (isColorCustomized) {
+      const safeColor = selectedColor.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+      parts.push(`color-${safeColor}`);
+    }
+    if (hasNameOption) {
+      const safeName = customName.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+      parts.push(`name-${nameOption}-${safeName}`);
+    }
+    const cartKey = parts.join("-");
+
+    const selectedNameOptLabel = NAME_OPTIONS.find((o) => o.id === nameOption)?.label;
+
+    addItem({
+      category: "dupatta",
+      id: product.id,
+      name: product.name,
+      price: totalPrice,
+      image: product.images[0] || "",
+      quantity: 1,
+      key: cartKey,
+      customization: {
+        ...(isColorCustomized ? { color: selectedColor } : {}),
+        ...(hasNameOption
+          ? {
+              nameOption: selectedNameOptLabel,
+              customName: customName.trim(),
+            }
+          : {}),
+      },
+    });
+
+    setJustAdded(true);
+    setTimeout(() => {
+      setJustAdded(false);
+    }, 1200);
   };
 
   return (
@@ -297,13 +354,19 @@ export default function ProductDetailPage() {
                         id="custom-name-input"
                         type="text"
                         value={customName}
-                        onChange={(e) => setCustomName(e.target.value)}
+                        onChange={(e) => {
+                          setCustomName(e.target.value);
+                          if (e.target.value.trim()) setNameError("");
+                        }}
                         placeholder="e.g. Fatima, Ayesha…"
                         maxLength={40}
-                        className="w-full px-4 py-3 rounded-xl border border-[#E8D9D3] bg-[#FAF6F1] font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30
+                        className={`w-full px-4 py-3 rounded-xl border ${nameError ? "border-red-500" : "border-[#E8D9D3]"} bg-[#FAF6F1] font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30
                                    focus:outline-none focus:border-[#7A1F2B] focus:ring-2 focus:ring-[#7A1F2B]/20
-                                   transition-all duration-200"
+                                   transition-all duration-200`}
                       />
+                      {nameError && (
+                        <p className="font-body text-xs text-red-500 font-medium">{nameError}</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -340,10 +403,24 @@ export default function ProductDetailPage() {
 
               <Button
                 type="button"
-                className="w-full bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A] font-body font-semibold px-6 py-3 h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg"
+                onClick={handleAddToCart}
+                className={`w-full font-body font-semibold px-6 py-3 h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                  justAdded
+                    ? "bg-[#C9A66B] text-[#2B2320]"
+                    : "bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A]"
+                }`}
               >
-                <ShoppingBag className="mr-2 w-4 h-4" />
-                Add to Cart — Rs. {totalPrice.toLocaleString()}
+                {justAdded ? (
+                  <>
+                    <Check className="mr-2 w-4 h-4" />
+                    Added to Cart — Rs. {totalPrice.toLocaleString()}
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="mr-2 w-4 h-4" />
+                    Add to Cart — Rs. {totalPrice.toLocaleString()}
+                  </>
+                )}
               </Button>
             </div>
           </div>

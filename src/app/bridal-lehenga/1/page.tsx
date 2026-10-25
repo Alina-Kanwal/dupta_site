@@ -54,14 +54,19 @@ export default function LehngaOneDetailPage() {
     }
     if (isCustom && neckMissing) return;
 
+    const safeSize = selectedSize.toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+
     addItem({
       category: "bridal",
       id: 1,
-      name: `${LEHENGA.name} (${selectedSize})`,
+      name: LEHENGA.name,
       price: 30000,
       image: LEHENGA.images[0],
       quantity: 1,
-      key: `bridal-1-${selectedSize}`,
+      key: `bridal-1-${safeSize}`,
+      customization: {
+        size: selectedSize,
+      },
     });
 
     setJustAdded(true);

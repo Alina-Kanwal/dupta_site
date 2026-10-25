@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { Product } from "@/lib/products";
 import { Button } from "@/components/ui/button";
-import { ShoppingBag } from "lucide-react";
+import { ShoppingBag, Check } from "lucide-react";
+import { useCart } from "@/context/CartContext";
 
 const COLOR_OPTIONS = ["Ivory"]; // Simplified for this card
 
@@ -36,12 +37,15 @@ const newCardProduct: Product = {
 };
 
 export default function NewCardDetailPage() {
+  const { addItem } = useCart();
   const [product] = useState<Product>(newCardProduct);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
   const [selectedColor,    setSelectedColor]    = useState<string>("Ivory");
   const [addName,         setAddName]         = useState(false);
   const [nameOption,      setNameOption]       = useState<NameOptionId>(null);
   const [customName,      setCustomName]       = useState("");
+  const [justAdded,       setJustAdded]        = useState(false);
+  const [nameError,       setNameError]        = useState("");
 
   const nameCharge = addName && nameOption
     ? NAME_OPTIONS.find((o) => o.id === nameOption)?.charge ?? 0
@@ -53,7 +57,46 @@ export default function NewCardDetailPage() {
     if (!checked) {
       setNameOption(null);
       setCustomName("");
+      setNameError("");
     }
+  };
+
+  const handleAddToCart = () => {
+    const hasNameOption = Boolean(addName && nameOption);
+    if (hasNameOption && !customName.trim()) {
+      setNameError("Please enter the custom name");
+      return;
+    }
+    setNameError("");
+
+    let cartKey = `dupatta-${newCardProduct.id}`;
+    if (hasNameOption) {
+      const safeName = customName.trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_");
+      cartKey = `dupatta-${newCardProduct.id}-name-${nameOption}-${safeName}`;
+    }
+
+    const selectedNameOptLabel = NAME_OPTIONS.find((o) => o.id === nameOption)?.label;
+
+    addItem({
+      category: "dupatta",
+      id: newCardProduct.id,
+      name: newCardProduct.name,
+      price: totalPrice,
+      image: newCardProduct.images[0] || "",
+      quantity: 1,
+      key: cartKey,
+      customization: hasNameOption
+        ? {
+            nameOption: selectedNameOptLabel,
+            customName: customName.trim(),
+          }
+        : undefined,
+    });
+
+    setJustAdded(true);
+    setTimeout(() => {
+      setJustAdded(false);
+    }, 1200);
   };
 
   return (
@@ -236,13 +279,19 @@ export default function NewCardDetailPage() {
                         id="custom-name-input"
                         type="text"
                         value={customName}
-                        onChange={(e) => setCustomName(e.target.value)}
+                        onChange={(e) => {
+                          setCustomName(e.target.value);
+                          if (e.target.value.trim()) setNameError("");
+                        }}
                         placeholder="e.g. Fatima, Ayesha…"
                         maxLength={40}
-                        className="w-full px-4 py-3 rounded-xl border border-[#E8D9D3] bg-[#FAF6F1] font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30
+                        className={`w-full px-4 py-3 rounded-xl border ${nameError ? "border-red-500" : "border-[#E8D9D3]"} bg-[#FAF6F1] font-body text-sm text-[#2B2320] placeholder:text-[#2B2320]/30
                                    focus:outline-none focus:border-[#7A1F2B] focus:ring-2 focus:ring-[#7A1F2B]/20
-                                   transition-all duration-200"
+                                   transition-all duration-200`}
                       />
+                      {nameError && (
+                        <p className="font-body text-xs text-red-500 font-medium">{nameError}</p>
+                      )}
                     </div>
                   )}
                 </div>
@@ -274,10 +323,24 @@ export default function NewCardDetailPage() {
 
               <Button
                 type="button"
-                className="w-full bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A] font-body font-semibold px-6 py-3 h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg"
+                onClick={handleAddToCart}
+                className={`w-full font-body font-semibold px-6 py-3 h-12 rounded-xl shadow-md transition-all duration-200 hover:shadow-lg ${
+                  justAdded
+                    ? "bg-[#C9A66B] text-[#2B2320]"
+                    : "bg-[#7A1F2B] text-[#FAF6F1] hover:bg-[#9B2B3A]"
+                }`}
               >
-                <ShoppingBag className="mr-2 w-4 h-4" />
-                Add to Cart — Rs. {totalPrice.toLocaleString()}
+                {justAdded ? (
+                  <>
+                    <Check className="mr-2 w-4 h-4" />
+                    Added to Cart — Rs. {totalPrice.toLocaleString()}
+                  </>
+                ) : (
+                  <>
+                    <ShoppingBag className="mr-2 w-4 h-4" />
+                    Add to Cart — Rs. {totalPrice.toLocaleString()}
+                  </>
+                )}
               </Button>
             </div>
           </div>

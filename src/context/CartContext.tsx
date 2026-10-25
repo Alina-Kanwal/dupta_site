@@ -2,6 +2,13 @@
 
 import React, { createContext, useContext, useState, useEffect } from "react";
 
+export interface CartItemCustomization {
+  size?: string;
+  color?: string;
+  nameOption?: string;
+  customName?: string;
+}
+
 export interface CartItem {
   key: string;
   id: number | string;
@@ -10,6 +17,7 @@ export interface CartItem {
   image: string;
   quantity: number;
   category?: string;
+  customization?: CartItemCustomization;
 }
 
 export interface AddItemInput {
@@ -20,6 +28,7 @@ export interface AddItemInput {
   image: string;
   quantity?: number;
   key?: string;
+  customization?: CartItemCustomization;
 }
 
 export interface CartContextType {
@@ -68,6 +77,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
                 key,
                 price,
                 quantity,
+                customization: raw.customization,
               });
             }
           });
@@ -120,6 +130,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           image: input.image,
           quantity: qtyToAdd,
           category: input.category,
+          customization: input.customization,
         },
       ];
     });
